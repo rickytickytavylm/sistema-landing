@@ -265,19 +265,39 @@ function navHtml() {
 
 function footerHtml(currentSlug) {
   return `  <footer class="footer">
-    <div class="container footer-inner">
-      <a href="../../" class="footer-brand">
-        <img src="../../assets/logo2-Photoroom.webp" alt="Система" />
-      </a>
-      <div class="footer-links">
+    <div class="container footer-grid">
+      <div class="footer-col-brand">
+        <a href="../../" class="footer-brand">
+          <img src="../../assets/logo2-Photoroom.webp" alt="Система" />
+        </a>
+        <p class="footer-brand-text">Пространство психологического развития и последовательной практики.</p>
+        <p class="footer-copyright">© 2026 Система Молодцова.<br />Все права защищены.</p>
+      </div>
+      
+      <div class="footer-col">
+        <h4>Направления</h4>
 ${DIRECTIONS.map((d) => `        <a href="../../directions/${d.slug}/"${d.slug === currentSlug ? ' aria-current="page"' : ''}>${d.title}</a>`).join('\n')}
-        <a href="../../offer/">Оферта</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>Документы</h4>
+        <a href="../../offer/">Публичная оферта</a>
         <a href="../../privacy/">Политика ПД</a>
         <a href="../../terms/">Соглашение</a>
         <a href="../../requisites/">Реквизиты</a>
-        <a href="${MAIN_SITE}" target="_blank" rel="noopener">Войти в систему</a>
       </div>
-      <p class="footer-note">© Система Молодцова. Платформа психологического развития. Материалы не заменяют консультацию специалиста.</p>
+
+      <div class="footer-col">
+        <h4>Платформа</h4>
+        <a href="${MAIN_SITE}" class="footer-link-login" target="_blank" rel="noopener">
+          Войти в систему
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+
+      <div class="footer-disclaimer">
+        Материалы платформы носят исключительно образовательный и информационный характер. Они не являются заменой очной консультации врача, медицинской помощи, психотерапии или иной специализированной медицинской помощи.
+      </div>
     </div>
   </footer>`;
 }
