@@ -271,6 +271,10 @@ function footerHtml(currentSlug) {
       </a>
       <div class="footer-links">
 ${DIRECTIONS.map((d) => `        <a href="../../directions/${d.slug}/"${d.slug === currentSlug ? ' aria-current="page"' : ''}>${d.title}</a>`).join('\n')}
+        <a href="../../offer/">Оферта</a>
+        <a href="../../privacy/">Политика ПД</a>
+        <a href="../../terms/">Соглашение</a>
+        <a href="../../requisites/">Реквизиты</a>
         <a href="${MAIN_SITE}" target="_blank" rel="noopener">Войти в систему</a>
       </div>
       <p class="footer-note">© Система Молодцова. Платформа психологического развития. Материалы не заменяют консультацию специалиста.</p>

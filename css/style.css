@@ -973,6 +973,135 @@ h1, h2, h3 { margin: 0; font-weight: 800; letter-spacing: -.04em; }
   font-size: 12.5px;
 }
 
+/* ─── Юридические страницы ───────────────────────────── */
+
+.legal-hero {
+  padding: clamp(128px, 18vh, 180px) 0 42px;
+}
+
+.legal-hero .lead {
+  max-width: 760px;
+}
+
+.legal-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 24px;
+  align-items: start;
+  padding-bottom: clamp(64px, 9vw, 110px);
+}
+
+.legal-card,
+.legal-side {
+  border: 1px solid var(--line);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, .06), rgba(255, 255, 255, .025)),
+    rgba(255, 255, 255, .025);
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(18px);
+}
+
+.legal-card {
+  padding: clamp(24px, 4vw, 46px);
+  border-radius: var(--radius-lg);
+}
+
+.legal-card h2 {
+  margin: 34px 0 12px;
+  font-size: clamp(22px, 2.4vw, 30px);
+  line-height: 1.18;
+  letter-spacing: -.03em;
+}
+
+.legal-card h2:first-child { margin-top: 0; }
+
+.legal-card h3 {
+  margin: 24px 0 8px;
+  font-size: 18px;
+  letter-spacing: -.02em;
+}
+
+.legal-card p,
+.legal-card li {
+  color: var(--ink-60);
+}
+
+.legal-card p {
+  margin: 0 0 14px;
+}
+
+.legal-card ul,
+.legal-card ol {
+  margin: 0 0 18px;
+  padding-left: 20px;
+}
+
+.legal-card li + li { margin-top: 8px; }
+
+.legal-muted {
+  color: var(--ink-45);
+  font-size: 14px;
+}
+
+.legal-table {
+  display: grid;
+  gap: 1px;
+  overflow: hidden;
+  margin: 20px 0;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--line);
+}
+
+.legal-row {
+  display: grid;
+  grid-template-columns: minmax(150px, .42fr) minmax(0, 1fr);
+  gap: 18px;
+  padding: 14px 16px;
+  background: rgba(5, 7, 13, .78);
+}
+
+.legal-row strong {
+  color: var(--ink);
+  font-size: 14px;
+}
+
+.legal-row span {
+  color: var(--ink-60);
+  overflow-wrap: anywhere;
+}
+
+.legal-side {
+  position: sticky;
+  top: 104px;
+  padding: 18px;
+  border-radius: var(--radius-md);
+}
+
+.legal-side strong {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 14px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ink-45);
+}
+
+.legal-side a {
+  display: block;
+  padding: 10px 12px;
+  border-radius: 12px;
+  color: var(--ink-60);
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.legal-side a:hover,
+.legal-side a[aria-current="page"] {
+  color: #fff;
+  background: rgba(255, 255, 255, .06);
+}
+
 /* ─── Страница направления ────────────────────────────── */
 
 .dir-hero {
@@ -1256,4 +1385,7 @@ html.js .reveal.is-visible {
   .dir-programs { grid-template-columns: 1fr; }
   .program-card { min-height: 300px; }
   .footer-inner { flex-direction: column; align-items: flex-start; }
+  .legal-layout { grid-template-columns: 1fr; }
+  .legal-side { position: static; }
+  .legal-row { grid-template-columns: 1fr; gap: 4px; }
 }
