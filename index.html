@@ -16,7 +16,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=153" />
+  <link rel="preload" as="image" href="assets/spectrum-flashes-coloured-light.webp" />
+  <link rel="stylesheet" href="css/style.css?v=155" />
 </head>
 <body>
 
@@ -53,6 +54,10 @@
 
   <!-- ─── Hero ──────────────────────────────────────── -->
   <header class="hero">
+    <picture class="hero-bg-wrap" aria-hidden="true">
+      <source media="(max-width: 760px)" srcset="assets/spectrum-flashes-coloured-light.webp" />
+      <img class="hero-bg" src="assets/spectrum-flashes-coloured-light.webp" alt="" fetchpriority="high" decoding="async" width="2000" height="1121" />
+    </picture>
     <div class="container">
       <h1 class="display reveal">Система, которая<br /><span class="text-gradient">возвращает к себе</span></h1>
       <p class="lead reveal">Персональный маршрут вместо хаотичных курсов: выбираете направление — Система собирает программы, практики и AI-поддержку вокруг вашего запроса.</p>
@@ -65,25 +70,25 @@
       </div>
       <p class="hero-note reveal">12+ программ · AI-помощник · медитации · сообщество</p>
 
-      <a class="landing-event-card reveal" id="event-yoga" href="https://система-молодцова.рф/event-yoga/" target="_blank" rel="noopener">
-        <span class="landing-event-hero">
-          <img src="assets/event-yoga-logo.webp" alt="" loading="lazy" />
-        </span>
-        <span class="landing-event-body">
-          <small class="landing-event-kicker">Ивент Системы</small>
-          <strong class="landing-event-headline">Йога и терапия</strong>
-          <em class="landing-event-subline">Дыхание, практики и работа с состояниями — 52 видео в двух модулях.</em>
-          <span class="landing-event-footer">
-            <span class="landing-event-app">
-              <img class="landing-event-icon" src="assets/event-yoga-logo.webp" alt="" loading="lazy" />
-              <span class="landing-event-appcopy">
+      <a class="today-event-yoga-card landing-event-card reveal" id="event-yoga" href="events/event-yoga/" aria-label="Открыть ивент Йога и терапия">
+        <div class="today-event-hero">
+          <img src="assets/mmeditation.webp" alt="" loading="lazy" decoding="async" />
+        </div>
+        <div class="today-event-body">
+          <p class="today-event-kicker">Ивент Системы</p>
+          <h3 class="today-event-headline">Йога и терапия</h3>
+          <p class="today-event-subline">Дыхание, практики и работа с состояниями — 52 видео в двух модулях.</p>
+          <div class="today-event-footer">
+            <div class="today-event-app">
+              <img class="today-event-icon" src="assets/event-yoga-logo.webp" alt="" loading="lazy" decoding="async" />
+              <div class="today-event-appcopy">
                 <strong>Йога и терапия</strong>
                 <span>52 видео · 2 модуля</span>
-              </span>
-            </span>
-            <span class="landing-event-cta">Открыть</span>
-          </span>
-        </span>
+              </div>
+            </div>
+            <span class="today-event-cta">Открыть</span>
+          </div>
+        </div>
       </a>
 
       <div class="stats reveal" data-stagger>

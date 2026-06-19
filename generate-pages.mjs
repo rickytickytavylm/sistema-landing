@@ -1,7 +1,8 @@
 // Генератор внутренних страниц: node generate-pages.mjs
 // Направления → directions/<slug>/index.html
 // Возможности → features/<slug>/index.html
-// Правки контента — в DIRECTIONS / FEATURES ниже, потом перегенерировать.
+// Ивенты → events/<slug>/index.html
+// Правки контента — в DIRECTIONS / FEATURES / EVENTS ниже, потом перегенерировать.
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -223,6 +224,30 @@ const FEATURES = [
   },
 ];
 
+const EVENTS = [
+  {
+    slug: 'event-yoga',
+    tag: 'Ивент',
+    title: 'Йога и терапия',
+    titleHtml: 'Йога и<br /><span class="text-gradient">терапия</span>',
+    description: 'Ивент Системы Молодцова: 52 видео-урока йоги и терапии в двух модулях — дыхание, практики и работа с состояниями.',
+    hero: 'mmeditation.webp',
+    appUrl: `${MAIN_SITE}event-yoga/`,
+    note: '52 видео · 2 модуля',
+    lead: 'Два модуля видео-уроков и практик для учащихся: тело, дыхание, внимание и работа с состояниями.',
+    fits: [
+      { title: 'Модуль для учащихся', text: 'Базовый трек: теория, практика, дыхание, типология характеров, фасции, чакры и методология ведения.' },
+      { title: 'Модуль 2', text: 'Продолжение: сеттинг, практики, эмоциональные нарушения, коммуникация, отношения, потребности, диагностика и пранаямы.' },
+      { title: 'Формат и ритм', text: 'Последовательные видео-уроки — можно проходить в своём темпе или вместе с группой внутри Системы.' },
+    ],
+    steps: [
+      { title: '52 видео', text: 'Полный архив ивента: от базовых практик до углублённой работы с состояниями и телом.' },
+      { title: '2 модуля', text: 'Первый модуль закладывает фундамент, второй углубляет практику и терапевтический контекст.' },
+      { title: 'Внутри Системы', text: 'Все уроки доступны после входа — смотрите на платформе, отслеживайте прогресс и возвращайтесь к нужному месту.' },
+    ],
+  },
+];
+
 const arrowSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg>';
 
 const liquidGlassSvg = `  <!-- Liquid glass: SVG-фильтр преломления для backdrop-filter кнопок -->
@@ -320,7 +345,7 @@ function headHtml(title, description, hero) {
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../../css/style.css?v=150" />
+  <link rel="stylesheet" href="../../css/style.css?v=155" />
 </head>`;
 }
 
@@ -545,6 +570,89 @@ ${liquidGlassSvg}
 `;
 }
 
+function eventPage(event) {
+  return `<!DOCTYPE html>
+<html lang="ru">
+${headHtml(event.title, event.description, event.hero)}
+<body>
+
+${navHtml()}
+
+  <header class="dir-hero">
+    <img class="card-media" src="../../assets/${event.hero}" alt="" />
+    <div class="container">
+      <div class="breadcrumbs reveal">
+        <a href="../../">Главная</a><i>/</i><a href="../../#event-yoga">Ивент</a><i>/</i><span>${event.title}</span>
+      </div>
+      <span class="kicker reveal">${event.tag}</span>
+      <h1 class="display reveal">${event.titleHtml}</h1>
+      <p class="lead reveal">${event.lead}</p>
+      <p class="hero-note reveal">${event.note}</p>
+      <div class="dir-hero-actions reveal">
+        <a class="btn btn-primary" href="${event.appUrl}" target="_blank" rel="noopener">
+          Смотреть в Системе
+          ${arrowSvg}
+        </a>
+        <a class="btn btn-ghost" href="../../#event-yoga">На главную</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="kicker">Что внутри</span>
+        <h2 class="h2">Два модуля — полный трек</h2>
+      </div>
+      <div class="fit-grid" data-stagger>
+${event.fits.map((fit) => `        <div class="fit-item reveal">
+          <strong>${fit.title}</strong>
+          <p>${fit.text}</p>
+        </div>`).join('\n')}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="kicker">Как устроен ивент</span>
+        <h2 class="h2">Видео, практики, последовательность</h2>
+      </div>
+      <div class="steps" data-stagger>
+${event.steps.map((step) => `        <div class="step reveal">
+          <h3>${step.title}</h3>
+          <p>${step.text}</p>
+        </div>`).join('\n')}
+      </div>
+    </div>
+  </section>
+
+  <section class="final-cta">
+    <div class="container">
+      <span class="kicker reveal">${event.tag}</span>
+      <h2 class="h2 reveal">${event.title} уже ждёт<br />внутри Системы</h2>
+      <p class="lead reveal">Войдите на платформу — все ${event.note.split(' · ')[0]} ивента доступны сразу после регистрации.</p>
+      <div class="hero-actions reveal">
+        <a class="btn btn-primary" href="${event.appUrl}" target="_blank" rel="noopener">
+          Смотреть в Системе
+          ${arrowSvg}
+        </a>
+        <a class="btn btn-ghost" href="${MAIN_SITE}" target="_blank" rel="noopener">Войти в систему</a>
+      </div>
+    </div>
+  </section>
+
+${footerHtml(null)}
+
+${liquidGlassSvg}
+
+  <script src="../../js/main.js"></script>
+</body>
+</html>
+`;
+}
+
 for (const dir of DIRECTIONS) {
   const folder = join(ROOT, 'directions', dir.slug);
   mkdirSync(folder, { recursive: true });
@@ -556,5 +664,11 @@ for (const feature of FEATURES) {
   mkdirSync(folder, { recursive: true });
   writeFileSync(join(folder, 'index.html'), featurePage(feature), 'utf8');
   console.log(`✓ features/${feature.slug}/index.html`);
+}
+for (const event of EVENTS) {
+  const folder = join(ROOT, 'events', event.slug);
+  mkdirSync(folder, { recursive: true });
+  writeFileSync(join(folder, 'index.html'), eventPage(event), 'utf8');
+  console.log(`✓ events/${event.slug}/index.html`);
 }
 console.log('Готово.');
