@@ -114,10 +114,7 @@ h1, h2, h3 { margin: 0; font-weight: 800; letter-spacing: -.04em; }
 
 /* ─── Кнопки ──────────────────────────────────────────── */
 
-/* Liquid Glass (iOS 26/27): преломление фона через SVG feDisplacementMap на базе map.png,
-   световая кромка по периметру и спекулярный блик сверху.
-   Фильтр #liquid-glass объявлен инлайн-SVG в конце каждой страницы.
-   Safari/Firefox не умеют url() в backdrop-filter — там остаётся blur-фолбэк. */
+/* iOS-style pill buttons: clean blur, soft border, no liquid displacement. */
 
 .btn {
   position: relative;
@@ -137,66 +134,56 @@ h1, h2, h3 { margin: 0; font-weight: 800; letter-spacing: -.04em; }
   text-decoration: none;
   cursor: pointer;
   white-space: nowrap;
-  transition: transform .3s var(--ease-out), box-shadow .3s ease, background .3s ease, border-color .3s ease;
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  backdrop-filter: blur(18px) saturate(160%);
+  transition: transform .22s var(--ease-out), box-shadow .22s ease, background .22s ease, border-color .22s ease, opacity .22s ease;
 }
 
 .btn svg { width: 17px; height: 17px; flex: 0 0 auto; }
 
 .btn-primary {
-  color: #fff;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.03) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  -webkit-backdrop-filter: blur(18px) saturate(180%);
-  backdrop-filter: blur(18px) saturate(180%);
-  -webkit-backdrop-filter: blur(3px) saturate(180%) url(#liquid-glass);
-  backdrop-filter: blur(3px) saturate(180%) url(#liquid-glass);
+  color: #05070d;
+  background: rgba(255, 255, 255, .94);
+  border: 1px solid rgba(255, 255, 255, .72);
   box-shadow:
-    inset 0 1px 1px rgba(255, 255, 255, .45),
-    inset 0 -1px 1px rgba(255, 255, 255, .15),
-    inset 1px 0 1px rgba(255, 255, 255, .2),
-    inset -1px 0 1px rgba(255, 255, 255, .2),
-    0 12px 32px rgba(0, 0, 0, .28);
+    inset 0 1px 0 rgba(255, 255, 255, .9),
+    inset 0 -1px 0 rgba(0, 0, 0, .08),
+    0 14px 34px rgba(0, 0, 0, .28);
 }
 
 .btn-primary:hover {
-  transform: scale(1.05);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.12) 50%, rgba(255, 255, 255, 0.05) 100%);
-  border-color: rgba(255, 255, 255, 0.45);
+  transform: translateY(-1px);
+  background: #fff;
+  border-color: rgba(255, 255, 255, .9);
   box-shadow:
-    inset 0 1px 1px rgba(255, 255, 255, .55),
-    inset 0 -1px 1px rgba(255, 255, 255, .2),
-    inset 1px 0 1px rgba(255, 255, 255, .3),
-    inset -1px 0 1px rgba(255, 255, 255, .3),
-    0 18px 42px rgba(0, 0, 0, .38);
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    inset 0 -1px 0 rgba(0, 0, 0, .08),
+    0 18px 42px rgba(0, 0, 0, .34);
 }
 
-.btn-primary:active { transform: scale(0.98); }
+.btn-primary:active { transform: translateY(0) scale(.98); opacity: .92; }
 
 .btn-ghost {
-  color: rgba(255, 255, 255, .9);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 50%, rgba(255, 255, 255, 0) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  -webkit-backdrop-filter: blur(14px) saturate(140%);
-  backdrop-filter: blur(14px) saturate(140%);
-  -webkit-backdrop-filter: blur(2px) saturate(140%) url(#liquid-glass);
-  backdrop-filter: blur(2px) saturate(140%) url(#liquid-glass);
+  color: rgba(255, 255, 255, .92);
+  background: rgba(255, 255, 255, .09);
+  border: 1px solid rgba(255, 255, 255, .18);
   box-shadow:
-    inset 0 1px 1px rgba(255, 255, 255, .25),
-    inset 0 -1px 1px rgba(255, 255, 255, .08),
-    0 8px 24px rgba(0, 0, 0, .18);
+    inset 0 1px 0 rgba(255, 255, 255, .18),
+    inset 0 -1px 0 rgba(255, 255, 255, .04),
+    0 10px 28px rgba(0, 0, 0, .18);
 }
 
 .btn-ghost:hover {
-  transform: scale(1.05);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.06) 50%, rgba(255, 255, 255, 0.01) 100%);
-  border-color: rgba(255, 255, 255, 0.28);
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, .14);
+  border-color: rgba(255, 255, 255, .28);
   box-shadow:
-    inset 0 1px 1px rgba(255, 255, 255, .35),
-    inset 0 -1px 1px rgba(255, 255, 255, .12),
-    0 12px 32px rgba(0, 0, 0, .24);
+    inset 0 1px 0 rgba(255, 255, 255, .24),
+    inset 0 -1px 0 rgba(255, 255, 255, .06),
+    0 14px 34px rgba(0, 0, 0, .26);
 }
 
-.btn-ghost:active { transform: scale(0.98); }
+.btn-ghost:active { transform: translateY(0) scale(.98); opacity: .9; }
 
 .btn-sm { min-height: 42px; padding: 0 20px; font-size: 13.5px; }
 

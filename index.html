@@ -16,8 +16,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="preload" as="image" href="assets/spectrum-flashes-coloured-light.webp" />
-  <link rel="stylesheet" href="css/style.css?v=158" />
+  <link rel="preload" as="image" href="assets/spectrum-flashes-coloured-light.webp" media="(min-width: 761px)" />
+  <link rel="preload" as="image" href="assets/hero_landing_mob.webp" media="(max-width: 760px)" />
+  <link rel="stylesheet" href="css/style.css?v=160" />
 </head>
 <body>
 
@@ -55,7 +56,7 @@
   <!-- ─── Hero ──────────────────────────────────────── -->
   <header class="hero">
     <picture class="hero-bg-wrap" aria-hidden="true">
-      <source media="(max-width: 760px)" srcset="assets/spectrum-flashes-coloured-light.webp" />
+      <source media="(max-width: 760px)" srcset="assets/hero_landing_mob.webp" type="image/webp" />
       <img class="hero-bg" src="assets/spectrum-flashes-coloured-light.webp" alt="" fetchpriority="high" decoding="async" width="2000" height="1121" />
     </picture>
     <div class="container">
