@@ -871,6 +871,27 @@ h1, h2, h3 { margin: 0; font-weight: 800; letter-spacing: -.04em; }
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, .12), var(--shadow-card);
 }
 
+.author-page-hero {
+  padding: clamp(108px, 15vh, 128px) 0 clamp(40px, 6vw, 56px);
+}
+
+.author-card-page {
+  margin-top: 0;
+}
+
+.author-card-page .author-page-title {
+  font-size: clamp(2rem, 5vw, 3rem);
+  margin: 0 0 16px;
+}
+
+.author-card-page .author-page-lead {
+  margin-bottom: 16px;
+}
+
+.author-card-page .author-page-actions {
+  margin-top: 24px;
+}
+
 a.author-card-link {
   text-decoration: none;
   color: inherit;
@@ -1509,6 +1530,33 @@ html.js .reveal.is-visible {
   .stat { padding: 20px 18px; }
   .hero-actions .btn { width: 100%; }
   .dir-hero-actions .btn { width: 100%; }
+  .author-page-hero {
+    padding-top: max(96px, calc(86px + env(safe-area-inset-top)));
+    padding-bottom: 32px;
+  }
+  .author-card-page {
+    padding: 20px 16px;
+    gap: 18px;
+  }
+  .author-card-page .author-photo {
+    max-width: none;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+  }
+  .author-card-page .author-page-title {
+    font-size: clamp(1.85rem, 9vw, 2.35rem);
+  }
+  .author-card-page .author-facts {
+    gap: 8px;
+  }
+  .author-card-page .author-page-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .author-card-page .author-page-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
   .dir-programs { grid-template-columns: 1fr; }
   .program-card { min-height: 300px; }
   .footer-grid {

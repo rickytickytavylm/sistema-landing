@@ -504,7 +504,7 @@ function headHtml(opts) {
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="${r}/css/style.css?v=162" />${jsonLdBlock}
+  <link rel="stylesheet" href="${r}/css/style.css?v=163" />${jsonLdBlock}
 </head>`;
 }
 
@@ -802,23 +802,22 @@ ${head}
 <body>
 
 ${navHtml(1)}
+
+  <section class="section author-page-hero">
     <div class="container">
-      <div class="breadcrumbs reveal">
-        <a href="../">Главная</a><i>/</i><span>${a.name}</span>
-      </div>
-      <div class="author-card reveal" style="margin-top: 24px">
+      <div class="author-card author-card-page reveal">
         <div class="author-photo">
           <img src="../assets/${a.photo}" alt="${a.name} — психолог, автор ${SITE_NAME}" width="760" height="570" loading="eager" decoding="async" />
         </div>
         <div class="author-copy">
           <span class="author-role">${a.role}</span>
-          <h1 class="display" style="font-size: clamp(2rem, 5vw, 3rem); margin: 0 0 16px">${a.name}</h1>
-          <p class="lead" style="margin-bottom: 16px">${a.lead}</p>
+          <h1 class="display author-page-title">${a.name}</h1>
+          <p class="lead author-page-lead">${a.lead}</p>
 ${a.paragraphs.map((p) => `          <p>${p}</p>`).join('\n')}
           <div class="author-facts">
 ${a.facts.map((f) => `            <span>${f}</span>`).join('\n')}
           </div>
-          <div class="dir-hero-actions" style="margin-top: 24px">
+          <div class="dir-hero-actions author-page-actions">
             <a class="btn btn-primary" href="${MAIN_SITE}" target="_blank" rel="noopener">
               Войти в Систему
               ${arrowSvg}
