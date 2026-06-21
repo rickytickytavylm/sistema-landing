@@ -6,9 +6,20 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import {
+  LANDING_SITE,
+  MAIN_SITE,
+  SITE_NAME,
+  SITE_TAGLINE,
+  AUTHOR,
+  DEFAULT_OG_IMAGE,
+  INDEXNOW_KEY,
+  TODAY_ISO,
+  EVENT_DATE_LABEL,
+  EVENT_START_ISO,
+} from './seo.config.mjs';
 
 const ROOT = dirname(fileURLToPath(import.meta.url));
-const MAIN_SITE = 'https://система-молодцова.рф/';
 
 const DIRECTIONS = [
   {
@@ -234,7 +245,12 @@ const EVENTS = [
     hero: 'mmeditation.webp',
     appUrl: `${MAIN_SITE}event-yoga/`,
     note: '52 видео · 2 модуля',
-    lead: 'Два модуля видео-уроков и практик для учащихся: тело, дыхание, внимание и работа с состояниями.',
+    seoTitle: 'Йога и терапия — ивент 21 июня 2026',
+    eventStart: EVENT_START_ISO,
+    eventDateLabel: EVENT_DATE_LABEL,
+    eventEnd: '2026-12-31T23:59:59+03:00',
+    keywords: 'йога и терапия, ивент система молодцова, йога онлайн, практики дыхания, руслан молодцов, 52 видео, 21 июня',
+    lead: `Два модуля видео-уроков и практик для учащихся: тело, дыхание, внимание и работа с состояниями. Старт ивента — ${EVENT_DATE_LABEL}.`,
     fits: [
       { title: 'Модуль для учащихся', text: 'Базовый трек: теория, практика, дыхание, типология характеров, фасции, чакры и методология ведения.' },
       { title: 'Модуль 2', text: 'Продолжение: сеттинг, практики, эмоциональные нарушения, коммуникация, отношения, потребности, диагностика и пранаямы.' },
@@ -327,33 +343,133 @@ ${DIRECTIONS.map((d) => `        <a href="../../directions/${d.slug}/"${d.slug =
   </footer>`;
 }
 
-function headHtml(title, description, hero) {
+function escapeHtml(value) {
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function canonicalUrl(path) {
+  const clean = String(path || '').replace(/^\/+/, '').replace(/\/+$/, '');
+  return clean ? `${LANDING_SITE}/${clean}/` : `${LANDING_SITE}/`;
+}
+
+function ogImageUrl(hero) {
+  if (!hero) return DEFAULT_OG_IMAGE;
+  if (hero.startsWith('http')) return hero;
+  return `${LANDING_SITE}/assets/${hero.replace(/^\.\.\/\.\.\/assets\//, '')}`;
+}
+
+function jsonLdScript(items) {
+  const list = Array.isArray(items) ? items : [items];
+  return list.map((item) => `  <script type="application/ld+json">\n${JSON.stringify(item, null, 2)}\n  </script>`).join('\n');
+}
+
+function organizationJsonLd() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: SITE_NAME,
+    url: LANDING_SITE,
+    logo: `${LANDING_SITE}/assets/logo2.png`,
+    description: SITE_TAGLINE,
+    founder: { '@type': 'Person', name: AUTHOR },
+    sameAs: [MAIN_SITE.replace(/\/$/, '')],
+  };
+}
+
+function breadcrumbJsonLd(path, label) {
+  const parts = String(path).split('/').filter(Boolean);
+  const items = [{ '@type': 'ListItem', position: 1, name: 'Главная', item: `${LANDING_SITE}/` }];
+  let acc = '';
+  parts.forEach((part, index) => {
+    acc += `${part}/`;
+    items.push({
+      '@type': 'ListItem',
+      position: index + 2,
+      name: label || part,
+      item: canonicalUrl(acc),
+    });
+  });
+  return { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: items };
+}
+
+function headHtml(opts) {
+  const {
+    title,
+    pageTitle,
+    description,
+    hero,
+    path,
+    keywords = '',
+    jsonLd = [],
+  } = opts;
+  const fullTitle = pageTitle || `${title} · ${SITE_NAME}`;
+  const canonical = canonicalUrl(path);
+  const ogImage = ogImageUrl(hero);
+  const jsonLdBlock = jsonLd.length ? `\n${jsonLdScript(jsonLd)}` : '';
+
   return `<head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>${title} · Система Молодцова</title>
-  <meta name="description" content="${description}" />
+  <title>${escapeHtml(fullTitle)}</title>
+  <meta name="description" content="${escapeHtml(description)}" />
+  ${keywords ? `<meta name="keywords" content="${escapeHtml(keywords)}" />` : ''}
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="author" content="${escapeHtml(AUTHOR)}" />
+  <link rel="canonical" href="${canonical}" />
   <meta name="theme-color" content="#05070d" />
   <meta name="color-scheme" content="dark" />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="${title} · Система Молодцова" />
-  <meta property="og:description" content="${description}" />
-  <meta property="og:image" content="../../assets/${hero}" />
+  <meta property="og:site_name" content="${escapeHtml(SITE_NAME)}" />
+  <meta property="og:locale" content="ru_RU" />
+  <meta property="og:title" content="${escapeHtml(fullTitle)}" />
+  <meta property="og:description" content="${escapeHtml(description)}" />
+  <meta property="og:url" content="${canonical}" />
+  <meta property="og:image" content="${ogImage}" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="${escapeHtml(fullTitle)}" />
+  <meta name="twitter:description" content="${escapeHtml(description)}" />
+  <meta name="twitter:image" content="${ogImage}" />
   <link rel="icon" type="image/png" href="../../assets/logo2.png" />
   <link rel="apple-touch-icon" href="../../assets/logo2.png" />
   <link rel="preload" as="image" href="../../assets/${hero}" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../../css/style.css?v=155" />
+  <link rel="stylesheet" href="../../css/style.css?v=161" />${jsonLdBlock}
 </head>`;
 }
 
 function directionPage(dir) {
   const others = DIRECTIONS.filter((d) => d.slug !== dir.slug);
+  const path = `directions/${dir.slug}`;
+  const head = headHtml({
+    title: dir.title,
+    description: dir.description,
+    hero: dir.hero,
+    path,
+    keywords: `${dir.title.toLowerCase()}, система молодцова, ${dir.tag.toLowerCase()}, психология онлайн`,
+    jsonLd: [
+      organizationJsonLd(),
+      breadcrumbJsonLd(path, dir.title),
+      {
+        '@context': 'https://schema.org',
+        '@type': 'Course',
+        name: dir.title,
+        description: dir.description,
+        provider: organizationJsonLd(),
+        url: canonicalUrl(path),
+        inLanguage: 'ru-RU',
+        offers: { '@type': 'Offer', url: MAIN_SITE, price: '999', priceCurrency: 'RUB' },
+      },
+    ],
+  });
   return `<!DOCTYPE html>
 <html lang="ru">
-${headHtml(dir.title, dir.description, dir.hero)}
+${head}
 <body>
 
 ${navHtml()}
@@ -475,9 +591,29 @@ ${liquidGlassSvg}
 
 function featurePage(feature) {
   const others = FEATURES.filter((f) => f.slug !== feature.slug);
+  const path = `features/${feature.slug}`;
+  const head = headHtml({
+    title: feature.title,
+    description: feature.description,
+    hero: feature.hero,
+    path,
+    keywords: `${feature.shortTitle.toLowerCase()}, система молодцова, ${feature.tag.toLowerCase()}`,
+    jsonLd: [
+      organizationJsonLd(),
+      breadcrumbJsonLd(path, feature.title),
+      {
+        '@context': 'https://schema.org',
+        '@type': 'WebPage',
+        name: feature.title,
+        description: feature.description,
+        url: canonicalUrl(path),
+        isPartOf: { '@type': 'WebSite', name: SITE_NAME, url: LANDING_SITE },
+      },
+    ],
+  });
   return `<!DOCTYPE html>
 <html lang="ru">
-${headHtml(feature.title, feature.description, feature.hero)}
+${head}
 <body>
 
 ${navHtml()}
@@ -571,9 +707,46 @@ ${liquidGlassSvg}
 }
 
 function eventPage(event) {
+  const path = `events/${event.slug}`;
+  const head = headHtml({
+    title: event.title,
+    pageTitle: event.seoTitle || `${event.title} · ${SITE_NAME}`,
+    description: event.description,
+    hero: event.hero,
+    path,
+    keywords: event.keywords || `${event.title}, система молодцова, ивент`,
+    jsonLd: [
+      organizationJsonLd(),
+      breadcrumbJsonLd(path, event.title),
+      {
+        '@context': 'https://schema.org',
+        '@type': 'Event',
+        name: `${event.title} — ивент ${SITE_NAME}`,
+        description: event.description,
+        startDate: event.eventStart || `${TODAY_ISO}T11:00:00+03:00`,
+        endDate: event.eventEnd || `${TODAY_ISO}T23:59:59+03:00`,
+        eventStatus: 'https://schema.org/EventScheduled',
+        eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
+        image: ogImageUrl(event.hero),
+        url: canonicalUrl(path),
+        location: {
+          '@type': 'VirtualLocation',
+          url: event.appUrl || MAIN_SITE,
+        },
+        organizer: organizationJsonLd(),
+        offers: {
+          '@type': 'Offer',
+          url: event.appUrl || MAIN_SITE,
+          price: '0',
+          priceCurrency: 'RUB',
+          availability: 'https://schema.org/InStock',
+        },
+      },
+    ],
+  });
   return `<!DOCTYPE html>
 <html lang="ru">
-${headHtml(event.title, event.description, event.hero)}
+${head}
 <body>
 
 ${navHtml()}
@@ -587,7 +760,7 @@ ${navHtml()}
       <span class="kicker reveal">${event.tag}</span>
       <h1 class="display reveal">${event.titleHtml}</h1>
       <p class="lead reveal">${event.lead}</p>
-      <p class="hero-note reveal">${event.note}</p>
+      <p class="hero-note reveal">${event.note} · <time datetime="${event.eventStart || EVENT_START_ISO}">${event.eventDateLabel || EVENT_DATE_LABEL}</time></p>
       <div class="dir-hero-actions reveal">
         <a class="btn btn-primary" href="${event.appUrl}" target="_blank" rel="noopener">
           Смотреть в Системе
@@ -672,3 +845,106 @@ for (const event of EVENTS) {
   console.log(`✓ events/${event.slug}/index.html`);
 }
 console.log('Готово.');
+
+function writeSeoFiles() {
+  const lastmod = TODAY_ISO;
+  const urls = [
+    { loc: `${LANDING_SITE}/`, priority: '1.0', changefreq: 'daily' },
+    { loc: `${LANDING_SITE}/events/event-yoga/`, priority: '0.95', changefreq: 'daily' },
+    ...DIRECTIONS.map((d) => ({ loc: `${LANDING_SITE}/directions/${d.slug}/`, priority: '0.8', changefreq: 'weekly' })),
+    ...FEATURES.map((f) => ({ loc: `${LANDING_SITE}/features/${f.slug}/`, priority: '0.8', changefreq: 'weekly' })),
+    { loc: `${LANDING_SITE}/offer/`, priority: '0.3', changefreq: 'monthly' },
+    { loc: `${LANDING_SITE}/privacy/`, priority: '0.3', changefreq: 'monthly' },
+    { loc: `${LANDING_SITE}/terms/`, priority: '0.3', changefreq: 'monthly' },
+    { loc: `${LANDING_SITE}/requisites/`, priority: '0.3', changefreq: 'monthly' },
+  ];
+
+  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls.map((u) => `  <url>
+    <loc>${u.loc}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>${u.changefreq}</changefreq>
+    <priority>${u.priority}</priority>
+  </url>`).join('\n')}
+</urlset>
+`;
+  writeFileSync(join(ROOT, 'sitemap.xml'), sitemap, 'utf8');
+  console.log('✓ sitemap.xml');
+
+  const robots = `User-agent: *
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: ${LANDING_SITE}/sitemap.xml
+`;
+  writeFileSync(join(ROOT, 'robots.txt'), robots, 'utf8');
+  console.log('✓ robots.txt');
+
+  writeFileSync(join(ROOT, `${INDEXNOW_KEY}.txt`), INDEXNOW_KEY, 'utf8');
+  console.log(`✓ ${INDEXNOW_KEY}.txt`);
+
+  const llms = `# ${SITE_NAME}
+
+> ${SITE_TAGLINE}. Онлайн-платформа Руслана Молодцова: персональные маршруты психологического развития, 12+ программ, AI-помощник Лиза, медитации, марафоны, общий чат.
+
+**Сегодня (${TODAY_ISO}):** ивент «Йога и терапия» — старт в 11:00 МСК. 52 видео-урока в двух модулях.
+
+## Основные ссылки
+
+- [Лендинг](${LANDING_SITE}/): презентация Системы, направления, ивент
+- [Платформа / приложение](${MAIN_SITE}): вход, подписка PRO (999 ₽ / 30 дней, триал 1 день)
+- [Ивент «Йога и терапия»](${LANDING_SITE}/events/event-yoga/): описание ивента
+- [Йога и терапия в приложении](${MAIN_SITE}event-yoga/): 52 видео внутри платформы
+
+## Направления (маршруты)
+
+${DIRECTIONS.map((d) => `- [${d.title}](${LANDING_SITE}/directions/${d.slug}/): ${d.description}`).join('\n')}
+
+## Возможности платформы
+
+${FEATURES.map((f) => `- [${f.title}](${LANDING_SITE}/features/${f.slug}/): ${f.description}`).join('\n')}
+
+## Автор
+
+- **${AUTHOR}** — психолог, автор всех программ Системы
+- Специализация: гештальт-подход, телесная терапия, психосоматика, гипнотерапия
+
+## Программы (внутри платформы)
+
+Гештальт-подход, Психосоматика, Мини-йога, Работа с травмами, Гипноз, Мастер Коммуникаций, Телесная терапия, Созависимость, Мужское и Женское и другие.
+
+## Для поисковых систем
+
+- Sitemap: ${LANDING_SITE}/sitemap.xml
+- Canonical домен лендинга: ${LANDING_SITE}
+- Canonical домен приложения: ${MAIN_SITE.replace(/\/$/, '')}
+
+## Контакты и документы
+
+- [Публичная оферта](${LANDING_SITE}/offer/)
+- [Политика ПД](${LANDING_SITE}/privacy/)
+- [Реквизиты](${LANDING_SITE}/requisites/)
+`;
+  writeFileSync(join(ROOT, 'llms.txt'), llms, 'utf8');
+  console.log('✓ llms.txt');
+
+  writeFileSync(join(ROOT, '.nojekyll'), '', 'utf8');
+  console.log('✓ .nojekyll');
+}
+
+writeSeoFiles();
