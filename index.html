@@ -29,7 +29,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <link rel="preload" as="image" href="assets/spectrum-flashes-coloured-light.webp" media="(min-width: 761px)" />
   <link rel="preload" as="image" href="assets/hero_landing_mob.webp" media="(max-width: 760px)" />
-  <link rel="stylesheet" href="css/style.css?v=161" />
+  <link rel="stylesheet" href="css/style.css?v=162" />
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -38,7 +38,11 @@
     "url": "https://sistema-molodtsova.ru",
     "logo": "https://sistema-molodtsova.ru/assets/logo2.png",
     "description": "Пространство психологического развития",
-    "founder": { "@type": "Person", "name": "Руслан Молодцов" },
+    "founder": {
+      "@type": "Person",
+      "name": "Руслан Молодцов",
+      "url": "https://sistema-molodtsova.ru/author/"
+    },
     "sameAs": ["https://система-молодцова.рф"]
   }
   </script>
@@ -326,9 +330,9 @@
   <!-- ─── Автор ─────────────────────────────────────── -->
   <section class="section" id="author">
     <div class="container">
-      <div class="author-card reveal">
+      <a class="author-card author-card-link reveal" href="author/" aria-label="Руслан Молодцов — подробнее об авторе">
         <div class="author-photo">
-          <img src="assets/ruslan_promo.webp" alt="Руслан Молодцов" loading="lazy" />
+          <img src="assets/ruslan_promo.webp" alt="Руслан Молодцов — психолог" loading="lazy" decoding="async" />
         </div>
         <div class="author-copy">
           <span class="author-role">Автор Системы</span>
@@ -341,8 +345,12 @@
             <span>Психосоматика</span>
             <span>Гипнотерапия</span>
           </div>
+          <div class="author-card-footer">
+            <span class="btn btn-ghost btn-sm">Подробнее</span>
+            <span class="author-card-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></span>
+          </div>
         </div>
-      </div>
+      </a>
     </div>
   </section>
 

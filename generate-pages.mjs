@@ -264,31 +264,66 @@ const EVENTS = [
   },
 ];
 
+const AUTHOR_PAGE = {
+  slug: 'author',
+  tag: 'Автор',
+  name: 'Руслан Молодцов',
+  seoTitle: 'Руслан Молодцов — психолог, автор Системы Молодцова',
+  titleHtml: 'Руслан<br /><span class="text-gradient">Молодцов</span>',
+  description:
+    'Руслан Молодцов — психолог и автор программ Системы Молодцова: гештальт-подход, психосоматика, гипноз, телесная терапия. Онлайн-курсы, медитации и практики для самопознания.',
+  keywords:
+    'руслан молодцов, молодцов психолог, психолог молодцов, гештальт молодцов, курсы молодцова, система молодцова, молодцов онлайн',
+  photo: 'ruslan_promo.webp',
+  role: 'Автор Системы · психолог',
+  lead:
+    'Психолог и автор всех программ Системы. Объединил гештальт-подход, телесную терапию, психосоматику и работу с состояниями в единое пространство — чтобы путь к себе был последовательным, а не хаотичным набором курсов.',
+  paragraphs: [
+    'Каждый материал записан так, чтобы его можно было применить в тот же день: без воды, с практиками и разборами реальных случаев.',
+    'Система Молодцова — новая платформа, где все программы автора собраны в персональные маршруты: от первого шага до глубокой практики.',
+  ],
+  specializations: [
+    { title: 'Гештальт-подход', text: 'Эмоции, потребности, контакт и границы — базовая программа Системы и фундамент самопознания.' },
+    { title: 'Психосоматика', text: 'Связь эмоций, стресса и телесных симптомов. Разборы реальных случаев и практики работы с телом.' },
+    { title: 'Телесная терапия', text: 'Внимание, дыхание, заземление — возвращение в тело как опору в сложные периоды.' },
+    { title: 'Гипнотерапия', text: 'Работа с вниманием и состояниями, безопасные практики трансового опыта в образовательном формате.' },
+  ],
+  facts: ['Гештальт-подход', 'Телесная терапия', 'Психосоматика', 'Гипнотерапия', 'Йога и практики'],
+};
+
 const arrowSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg>';
 
-const liquidGlassSvg = `  <!-- Liquid glass: SVG-фильтр преломления для backdrop-filter кнопок -->
+function pageRoot(depth = 2) {
+  return depth === 1 ? '..' : '../..';
+}
+
+function liquidGlassSvg(depth = 2) {
+  const r = pageRoot(depth);
+  return `  <!-- Liquid glass: SVG-фильтр преломления для backdrop-filter кнопок -->
   <svg class="lg-filter" aria-hidden="true" focusable="false">
     <filter id="liquid-glass" x="-50%" y="-50%" width="200%" height="200%" primitiveUnits="objectBoundingBox">
-      <feImage x="-50%" y="-50%" width="200%" height="200%" href="../../assets/map.png" result="map" />
+      <feImage x="-50%" y="-50%" width="200%" height="200%" href="${r}/assets/map.png" result="map" />
       <feGaussianBlur in="SourceGraphic" stdDeviation="0.02" result="blur" />
       <feDisplacementMap id="disp" in="blur" in2="map" scale="0.8" xChannelSelector="R" yChannelSelector="G" />
     </filter>
   </svg>`;
+}
 
-function navHtml() {
+function navHtml(depth = 2) {
+  const r = pageRoot(depth);
   return `  <nav class="nav" aria-label="Главная навигация">
     <div class="nav-inner">
-      <a href="../../" class="nav-brand">
-        <img src="../../assets/logo2-Photoroom.webp" alt="Система" />
+      <a href="${r}/" class="nav-brand">
+        <img src="${r}/assets/logo2-Photoroom.webp" alt="Система" />
       </a>
       <div class="nav-links">
-        <a href="../../#directions">Направления</a>
-        <a href="../../#features">Возможности</a>
-        <a href="../../#programs">Программы</a>
-        <a href="../../#author">Автор</a>
+        <a href="${r}/#directions">Направления</a>
+        <a href="${r}/#features">Возможности</a>
+        <a href="${r}/#programs">Программы</a>
+        <a href="${r}/author/">Автор</a>
       </div>
       <div class="nav-cta">
-        <a class="btn btn-ghost btn-sm" href="../../#directions">Все направления</a>
+        <a class="btn btn-ghost btn-sm" href="${r}/#directions">Все направления</a>
         <a class="btn btn-primary btn-sm" href="${MAIN_SITE}" target="_blank" rel="noopener">Войти в систему</a>
         <button class="nav-burger" type="button" aria-label="Меню" aria-expanded="false">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
@@ -296,20 +331,21 @@ function navHtml() {
       </div>
     </div>
     <div class="nav-mobile">
-      <a href="../../#directions">Направления</a>
-      <a href="../../#features">Возможности</a>
-      <a href="../../#programs">Программы</a>
+      <a href="${r}/#directions">Направления</a>
+      <a href="${r}/#features">Возможности</a>
+      <a href="${r}/#programs">Программы</a>
       <a href="${MAIN_SITE}" target="_blank" rel="noopener">Войти в систему</a>
     </div>
   </nav>`;
 }
 
-function footerHtml(currentSlug) {
+function footerHtml(currentSlug, depth = 2) {
+  const r = pageRoot(depth);
   return `  <footer class="footer">
     <div class="container footer-grid">
       <div class="footer-col-brand">
-        <a href="../../" class="footer-brand">
-          <img src="../../assets/logo2-Photoroom.webp" alt="Система" />
+        <a href="${r}/" class="footer-brand">
+          <img src="${r}/assets/logo2-Photoroom.webp" alt="Система" />
         </a>
         <p class="footer-brand-text">Пространство психологического развития и последовательной практики.</p>
         <p class="footer-copyright">© 2026 Система Молодцова.<br />Все права защищены.</p>
@@ -317,15 +353,15 @@ function footerHtml(currentSlug) {
       
       <div class="footer-col">
         <h4>Направления</h4>
-${DIRECTIONS.map((d) => `        <a href="../../directions/${d.slug}/"${d.slug === currentSlug ? ' aria-current="page"' : ''}>${d.title}</a>`).join('\n')}
+${DIRECTIONS.map((d) => `        <a href="${r}/directions/${d.slug}/"${d.slug === currentSlug ? ' aria-current="page"' : ''}>${d.title}</a>`).join('\n')}
       </div>
 
       <div class="footer-col">
         <h4>Документы</h4>
-        <a href="../../offer/">Публичная оферта</a>
-        <a href="../../privacy/">Политика ПД</a>
-        <a href="../../terms/">Соглашение</a>
-        <a href="../../requisites/">Реквизиты</a>
+        <a href="${r}/offer/">Публичная оферта</a>
+        <a href="${r}/privacy/">Политика ПД</a>
+        <a href="${r}/terms/">Соглашение</a>
+        <a href="${r}/requisites/">Реквизиты</a>
       </div>
 
       <div class="footer-col">
@@ -380,20 +416,47 @@ function organizationJsonLd() {
   };
 }
 
-function breadcrumbJsonLd(path, label) {
+function breadcrumbJsonLd(path, lastLabel) {
   const parts = String(path).split('/').filter(Boolean);
+  const segmentLabels = {
+    directions: 'Направления',
+    features: 'Возможности',
+    events: 'Ивент',
+    author: 'Автор',
+  };
   const items = [{ '@type': 'ListItem', position: 1, name: 'Главная', item: `${LANDING_SITE}/` }];
   let acc = '';
   parts.forEach((part, index) => {
     acc += `${part}/`;
+    const isLast = index === parts.length - 1;
+    const name = (isLast && lastLabel) ? lastLabel : (segmentLabels[part] || part);
     items.push({
       '@type': 'ListItem',
       position: index + 2,
-      name: label || part,
+      name,
       item: canonicalUrl(acc),
     });
   });
   return { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: items };
+}
+
+function personJsonLd(description, path = 'author') {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: AUTHOR_PAGE.name,
+    jobTitle: 'Психолог',
+    description,
+    image: ogImageUrl(AUTHOR_PAGE.photo),
+    url: canonicalUrl(path),
+    worksFor: {
+      '@type': 'Organization',
+      name: SITE_NAME,
+      url: LANDING_SITE,
+    },
+    sameAs: [MAIN_SITE.replace(/\/$/, ''), LANDING_SITE],
+    knowsAbout: AUTHOR_PAGE.facts,
+  };
 }
 
 function headHtml(opts) {
@@ -405,7 +468,9 @@ function headHtml(opts) {
     path,
     keywords = '',
     jsonLd = [],
+    depth = 2,
   } = opts;
+  const r = pageRoot(depth);
   const fullTitle = pageTitle || `${title} · ${SITE_NAME}`;
   const canonical = canonicalUrl(path);
   const ogImage = ogImageUrl(hero);
@@ -433,13 +498,13 @@ function headHtml(opts) {
   <meta name="twitter:title" content="${escapeHtml(fullTitle)}" />
   <meta name="twitter:description" content="${escapeHtml(description)}" />
   <meta name="twitter:image" content="${ogImage}" />
-  <link rel="icon" type="image/png" href="../../assets/logo2.png" />
-  <link rel="apple-touch-icon" href="../../assets/logo2.png" />
-  <link rel="preload" as="image" href="../../assets/${hero}" />
+  <link rel="icon" type="image/png" href="${r}/assets/logo2.png" />
+  <link rel="apple-touch-icon" href="${r}/assets/logo2.png" />
+  <link rel="preload" as="image" href="${r}/assets/${hero}" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../../css/style.css?v=161" />${jsonLdBlock}
+  <link rel="stylesheet" href="${r}/css/style.css?v=162" />${jsonLdBlock}
 </head>`;
 }
 
@@ -581,7 +646,7 @@ ${others.map((other) => `        <a class="more-dir reveal" href="../${other.slu
 
 ${footerHtml(dir.slug)}
 
-${liquidGlassSvg}
+${liquidGlassSvg()}
 
   <script src="../../js/main.js"></script>
 </body>
@@ -698,9 +763,124 @@ ${others.map((other) => `        <a class="more-dir reveal" href="../${other.slu
 
 ${footerHtml(null)}
 
-${liquidGlassSvg}
+${liquidGlassSvg()}
 
   <script src="../../js/main.js"></script>
+</body>
+</html>
+`;
+}
+
+function authorPage() {
+  const a = AUTHOR_PAGE;
+  const path = a.slug;
+  const head = headHtml({
+    title: a.name,
+    pageTitle: a.seoTitle,
+    description: a.description,
+    hero: a.photo,
+    path,
+    keywords: a.keywords,
+    depth: 1,
+    jsonLd: [
+      organizationJsonLd(),
+      personJsonLd(a.description, path),
+      breadcrumbJsonLd(path, a.name),
+      {
+        '@context': 'https://schema.org',
+        '@type': 'ProfilePage',
+        name: a.seoTitle,
+        url: canonicalUrl(path),
+        mainEntity: personJsonLd(a.description, path),
+      },
+    ],
+  });
+
+  return `<!DOCTYPE html>
+<html lang="ru">
+${head}
+<body>
+
+${navHtml(1)}
+    <div class="container">
+      <div class="breadcrumbs reveal">
+        <a href="../">Главная</a><i>/</i><span>${a.name}</span>
+      </div>
+      <div class="author-card reveal" style="margin-top: 24px">
+        <div class="author-photo">
+          <img src="../assets/${a.photo}" alt="${a.name} — психолог, автор ${SITE_NAME}" width="760" height="570" loading="eager" decoding="async" />
+        </div>
+        <div class="author-copy">
+          <span class="author-role">${a.role}</span>
+          <h1 class="display" style="font-size: clamp(2rem, 5vw, 3rem); margin: 0 0 16px">${a.name}</h1>
+          <p class="lead" style="margin-bottom: 16px">${a.lead}</p>
+${a.paragraphs.map((p) => `          <p>${p}</p>`).join('\n')}
+          <div class="author-facts">
+${a.facts.map((f) => `            <span>${f}</span>`).join('\n')}
+          </div>
+          <div class="dir-hero-actions" style="margin-top: 24px">
+            <a class="btn btn-primary" href="${MAIN_SITE}" target="_blank" rel="noopener">
+              Войти в Систему
+              ${arrowSvg}
+            </a>
+            <a class="btn btn-ghost" href="../#directions">Выбрать направление</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="kicker">Подходы</span>
+        <h2 class="h2">Специализации и программы</h2>
+        <p class="lead">Все направления доступны внутри Системы — в виде последовательных маршрутов и видео-программ.</p>
+      </div>
+      <div class="fit-grid" data-stagger>
+${a.specializations.map((item) => `        <div class="fit-item reveal">
+          <strong>${item.title}</strong>
+          <p>${item.text}</p>
+        </div>`).join('\n')}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="kicker">Маршруты</span>
+        <h2 class="h2">С чего начать в Системе</h2>
+      </div>
+      <div class="more-dirs" data-stagger>
+${DIRECTIONS.slice(0, 4).map((dir) => `        <a class="more-dir reveal" href="../directions/${dir.slug}/">
+          <img class="card-media" src="../assets/${dir.hero}" alt="" loading="lazy" />
+          <strong>${dir.title}</strong>
+        </a>`).join('\n')}
+      </div>
+    </div>
+  </section>
+
+  <section class="final-cta">
+    <div class="container">
+      <span class="kicker reveal">${a.tag}</span>
+      <h2 class="h2 reveal">Программы ${a.name.split(' ')[1]}<br />уже внутри Системы</h2>
+      <p class="lead reveal">12+ программ, AI-помощник, медитации и сообщество — персональный маршрут в вашем темпе.</p>
+      <div class="hero-actions reveal">
+        <a class="btn btn-primary" href="${MAIN_SITE}" target="_blank" rel="noopener">
+          Войти в систему
+          ${arrowSvg}
+        </a>
+        <a class="btn btn-ghost" href="../">На главную</a>
+      </div>
+    </div>
+  </section>
+
+${footerHtml(null, 1)}
+
+${liquidGlassSvg(1)}
+
+  <script src="../js/main.js"></script>
 </body>
 </html>
 `;
@@ -818,7 +998,7 @@ ${event.steps.map((step) => `        <div class="step reveal">
 
 ${footerHtml(null)}
 
-${liquidGlassSvg}
+${liquidGlassSvg()}
 
   <script src="../../js/main.js"></script>
 </body>
@@ -844,12 +1024,16 @@ for (const event of EVENTS) {
   writeFileSync(join(folder, 'index.html'), eventPage(event), 'utf8');
   console.log(`✓ events/${event.slug}/index.html`);
 }
+mkdirSync(join(ROOT, 'author'), { recursive: true });
+writeFileSync(join(ROOT, 'author', 'index.html'), authorPage(), 'utf8');
+console.log('✓ author/index.html');
 console.log('Готово.');
 
 function writeSeoFiles() {
   const lastmod = TODAY_ISO;
   const urls = [
     { loc: `${LANDING_SITE}/`, priority: '1.0', changefreq: 'daily' },
+    { loc: `${LANDING_SITE}/author/`, priority: '0.92', changefreq: 'weekly' },
     { loc: `${LANDING_SITE}/events/event-yoga/`, priority: '0.95', changefreq: 'daily' },
     ...DIRECTIONS.map((d) => ({ loc: `${LANDING_SITE}/directions/${d.slug}/`, priority: '0.8', changefreq: 'weekly' })),
     ...FEATURES.map((f) => ({ loc: `${LANDING_SITE}/features/${f.slug}/`, priority: '0.8', changefreq: 'weekly' })),
@@ -907,6 +1091,7 @@ Sitemap: ${LANDING_SITE}/sitemap.xml
 ## Основные ссылки
 
 - [Лендинг](${LANDING_SITE}/): презентация Системы, направления, ивент
+- [Руслан Молодцов — автор](${LANDING_SITE}/author/): психолог, автор всех программ Системы
 - [Платформа / приложение](${MAIN_SITE}): вход, подписка PRO (999 ₽ / 30 дней, триал 1 день)
 - [Ивент «Йога и терапия»](${LANDING_SITE}/events/event-yoga/): описание ивента
 - [Йога и терапия в приложении](${MAIN_SITE}event-yoga/): 52 видео внутри платформы
@@ -921,8 +1106,8 @@ ${FEATURES.map((f) => `- [${f.title}](${LANDING_SITE}/features/${f.slug}/): ${f.
 
 ## Автор
 
-- **${AUTHOR}** — психолог, автор всех программ Системы
-- Специализация: гештальт-подход, телесная терапия, психосоматика, гипнотерапия
+- [${AUTHOR_PAGE.name}](${LANDING_SITE}/author/): психолог, автор всех программ ${SITE_NAME}
+- Специализация: ${AUTHOR_PAGE.facts.join(', ')}
 
 ## Программы (внутри платформы)
 
