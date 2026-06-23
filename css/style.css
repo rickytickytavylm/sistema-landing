@@ -1606,3 +1606,15 @@ html.js .reveal.is-visible {
   color: rgba(255,255,255,.58);
   font-size: 13px;
 }
+
+.landing-preview-error {
+  margin: 0;
+  padding: 10px 16px 14px;
+  color: rgba(255, 196, 140, 0.92);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.landing-video-card.has-error .landing-preview-player {
+  opacity: 0.35;
+}

@@ -528,7 +528,7 @@ function previewVideoBlock(dir, r) {
         <p class="lead">${escapeHtml(pv.caption || '')}</p>
       </div>
       <div class="landing-video-card reveal" data-landing-preview data-video-slug="${escapeHtml(pv.slug)}">
-        <video class="landing-preview-player" controls playsinline preload="metadata" poster="${r}/assets/${escapeHtml(pv.poster || 'mini-yoga.webp')}"></video>
+        <video class="landing-preview-player" controls playsinline preload="metadata" poster="${r.replace(/\/$/, '')}/assets/${escapeHtml(pv.poster || 'mini-yoga.webp')}"></video>
         ${pv.duration ? `<p class="landing-preview-meta">${escapeHtml(pv.duration)} · бесплатный фрагмент</p>` : ''}
       </div>
     </div>
