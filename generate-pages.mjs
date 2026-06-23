@@ -42,12 +42,19 @@ const DIRECTIONS = [
   },
   {
     slug: 'calm',
-    tag: 'Состояние',
-    title: 'Спокойствие',
-    titleHtml: 'Спокойствие<br /><span class="text-gradient">как навык</span>',
+    tag: 'Йога',
+    title: 'Йога / Забота о себе',
+    titleHtml: 'Йога / Забота о себе<br /><span class="text-gradient">как навык</span>',
     description: 'Два мягких входа: через движение и через внимание к телу. Мини-йога и телесная терапия в Системе Молодцова.',
     hero: 'king_calm.webp',
     lead: 'Когда внутри постоянный шум, бесполезно «просто успокоиться». Этот маршрут учит снижать напряжение через тело, самым коротким путём к нервной системе.',
+    previewVideo: {
+      slug: 'Мини курс Йога/Что такое йога.mp4',
+      title: 'Что такое йога',
+      caption: 'Короткое введение из программы «Мини-йога»: йога как практический инструмент для тела и нервной системы. Первый урок доступен прямо здесь.',
+      poster: 'mini-yoga.webp',
+      duration: '2 мин',
+    },
     fits: [
       { title: 'Тревога фоном', text: 'Внутренний моторчик не выключается даже вечером. Практики дыхания и движения мягко снижают обороты.' },
       { title: 'Тело зажато', text: 'Плечи у ушей, челюсть сжата, дыхание поверхностное. Телесные практики возвращают ощущение опоры и расслабления.' },
@@ -155,6 +162,7 @@ const FEATURES = [
   },
   {
     slug: 'chat',
+    hidden: true,
     tag: 'Сообщество',
     title: 'Общий чат',
     shortTitle: 'Общий чат',
@@ -508,6 +516,25 @@ function headHtml(opts) {
 </head>`;
 }
 
+function previewVideoBlock(dir, r) {
+  if (!dir.previewVideo) return '';
+  const pv = dir.previewVideo;
+  return `
+  <section class="section landing-preview-video" id="preview-lesson">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="kicker">Попробуйте сейчас</span>
+        <h2 class="h2">Первый урок «${escapeHtml(pv.title)}»</h2>
+        <p class="lead">${escapeHtml(pv.caption || '')}</p>
+      </div>
+      <div class="landing-video-card reveal" data-landing-preview data-video-slug="${escapeHtml(pv.slug)}">
+        <video class="landing-preview-player" controls playsinline preload="metadata" poster="${r}/assets/${escapeHtml(pv.poster || 'mini-yoga.webp')}"></video>
+        ${pv.duration ? `<p class="landing-preview-meta">${escapeHtml(pv.duration)} · бесплатный фрагмент</p>` : ''}
+      </div>
+    </div>
+  </section>`;
+}
+
 function directionPage(dir) {
   const others = DIRECTIONS.filter((d) => d.slug !== dir.slug);
   const path = `directions/${dir.slug}`;
@@ -592,6 +619,8 @@ ${dir.programs.map((program) => `        <a class="program-card reveal" href="${
     </div>
   </section>
 
+${previewVideoBlock(dir, '../../')}
+
   <section class="section">
     <div class="container">
       <div class="section-head reveal">
@@ -609,7 +638,7 @@ ${dir.programs.map((program) => `        <a class="program-card reveal" href="${
         </div>
         <div class="step reveal">
           <h3>Практики и сообщество</h3>
-          <p>Медитации, марафоны и общий чат поддерживают ритм, путь легче, когда рядом живые люди.</p>
+          <p>Медитации, марафоны и терапевтические группы поддерживают ритм — путь легче, когда рядом живые люди.</p>
         </div>
       </div>
     </div>
@@ -649,6 +678,7 @@ ${footerHtml(dir.slug)}
 ${liquidGlassSvg()}
 
   <script src="../../js/main.js"></script>
+${dir.previewVideo ? '  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.4.12/dist/hls.min.js"></script>\n  <script src="../../js/preview-video.js"></script>' : ''}
 </body>
 </html>
 `;
@@ -679,7 +709,7 @@ function featurePage(feature) {
   return `<!DOCTYPE html>
 <html lang="ru">
 ${head}
-<body>
+${feature.hidden ? '  <script>location.replace("../../");</script>\n' : ''}<body>
 
 ${navHtml()}
 
@@ -1035,7 +1065,7 @@ function writeSeoFiles() {
     { loc: `${LANDING_SITE}/author/`, priority: '0.92', changefreq: 'weekly' },
     { loc: `${LANDING_SITE}/events/event-yoga/`, priority: '0.95', changefreq: 'daily' },
     ...DIRECTIONS.map((d) => ({ loc: `${LANDING_SITE}/directions/${d.slug}/`, priority: '0.8', changefreq: 'weekly' })),
-    ...FEATURES.map((f) => ({ loc: `${LANDING_SITE}/features/${f.slug}/`, priority: '0.8', changefreq: 'weekly' })),
+    ...FEATURES.filter((f) => !f.hidden).map((f) => ({ loc: `${LANDING_SITE}/features/${f.slug}/`, priority: '0.8', changefreq: 'weekly' })),
     { loc: `${LANDING_SITE}/offer/`, priority: '0.3', changefreq: 'monthly' },
     { loc: `${LANDING_SITE}/privacy/`, priority: '0.3', changefreq: 'monthly' },
     { loc: `${LANDING_SITE}/terms/`, priority: '0.3', changefreq: 'monthly' },
@@ -1101,7 +1131,7 @@ ${DIRECTIONS.map((d) => `- [${d.title}](${LANDING_SITE}/directions/${d.slug}/): 
 
 ## Возможности платформы
 
-${FEATURES.map((f) => `- [${f.title}](${LANDING_SITE}/features/${f.slug}/): ${f.description}`).join('\n')}
+${FEATURES.filter((f) => !f.hidden).map((f) => `- [${f.title}](${LANDING_SITE}/features/${f.slug}/): ${f.description}`).join('\n')}
 
 ## Автор
 
