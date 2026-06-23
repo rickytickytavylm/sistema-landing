@@ -512,7 +512,7 @@ function headHtml(opts) {
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="${r}/css/style.css?v=163" />${jsonLdBlock}
+  <link rel="stylesheet" href="${r}/css/style.css?v=165" />${jsonLdBlock}
 </head>`;
 }
 
@@ -678,7 +678,7 @@ ${footerHtml(dir.slug)}
 ${liquidGlassSvg()}
 
   <script src="../../js/main.js"></script>
-${dir.previewVideo ? '  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.4.12/dist/hls.min.js"></script>\n  <script src="../../js/preview-video.js"></script>' : ''}
+${dir.previewVideo ? '  <script src="../../js/preview-video.js"></script>' : ''}
 </body>
 </html>
 `;

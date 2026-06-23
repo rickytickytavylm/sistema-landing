@@ -438,13 +438,15 @@ h1, h2, h3 { margin: 0; font-weight: 800; letter-spacing: -.04em; }
 
 .today-event-headline {
   margin: 0 0 10px;
-  max-width: 11ch;
+  max-width: 100%;
   color: #fff;
-  font-size: clamp(32px, 4.6vw, 48px);
+  font-size: clamp(28px, 4.2vw, 44px);
   font-weight: 850;
-  line-height: 1.02;
-  letter-spacing: -.045em;
+  line-height: 1.06;
+  letter-spacing: -.035em;
   text-transform: uppercase;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .today-event-subline {
@@ -491,6 +493,8 @@ h1, h2, h3 { margin: 0; font-weight: 800; letter-spacing: -.04em; }
   font-weight: 750;
   line-height: 1.2;
   letter-spacing: -.02em;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .today-event-appcopy span {
@@ -1511,8 +1515,10 @@ html.js .reveal.is-visible {
   }
 
   .today-event-headline {
-    max-width: 10ch;
-    font-size: clamp(30px, 9vw, 40px);
+    max-width: 100%;
+    font-size: clamp(22px, 6.8vw, 34px);
+    line-height: 1.08;
+    letter-spacing: -.03em;
   }
 
   .today-event-subline {
@@ -1574,8 +1580,17 @@ html.js .reveal.is-visible {
   .legal-row { grid-template-columns: 1fr; gap: 4px; }
 }
 
+.section#programs:has(+ .landing-preview-video) {
+  padding-bottom: clamp(20px, 3vw, 40px);
+}
+
 .landing-preview-video {
-  padding-top: 0;
+  padding-top: clamp(56px, 8vw, 104px);
+  padding-bottom: clamp(32px, 5vw, 72px);
+}
+
+.landing-preview-video .section-head {
+  margin-bottom: clamp(32px, 4.5vw, 52px);
 }
 
 .landing-video-card {
