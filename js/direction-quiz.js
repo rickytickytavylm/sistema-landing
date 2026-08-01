@@ -264,6 +264,17 @@
       $('dq-program').setAttribute('href', dir.href);
       $('dq-open-route').setAttribute('href', dir.href);
 
+      // В систему с фокусом — только если результат «отношения/созависимость».
+      var enterApp = $('dq-enter-app');
+      if (enterApp) {
+        enterApp.setAttribute(
+          'href',
+          key === 'relationships'
+            ? 'https://система-молодцова.рф/?focus=relationships'
+            : 'https://система-молодцова.рф/'
+        );
+      }
+
       hide(elQuiz);
       show(elResult);
       setMode('done');
