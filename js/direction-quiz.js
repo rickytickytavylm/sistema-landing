@@ -174,11 +174,25 @@
     function show(el) { if (el) el.hidden = false; }
     function hide(el) { if (el) el.hidden = true; }
 
+    function setMode(mode) {
+      document.body.classList.toggle('dq-playing', mode === 'playing');
+      document.body.classList.toggle('dq-done', mode === 'done');
+    }
+
+    function scrollQuizIntoView() {
+      try {
+        var top = shell.getBoundingClientRect().top + window.pageYOffset - 72;
+        window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+      } catch (e) {
+        try { shell.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (err) { /* ignore */ }
+      }
+    }
+
     function renderStep(i) {
       current = i;
       var step = QUESTIONS[i];
       if (elStepNum) elStepNum.textContent = String(i + 1);
-      if (elBar) elBar.style.width = Math.round((i / total) * 100) + '%';
+      if (elBar) elBar.style.width = Math.round(((i + 0.15) / total) * 100) + '%';
       if (elKicker) elKicker.textContent = step.kicker;
       if (elQuestion) elQuestion.textContent = step.q;
       if (elBack) elBack.hidden = i === 0;
@@ -188,7 +202,7 @@
         var btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'dq-option' + (answers[i] === opt.d ? ' is-selected' : '');
-        btn.innerHTML = '<span class="dq-option-dot"></span><span class="dq-option-text">' + opt.t + '</span>';
+        btn.innerHTML = '<span class="dq-option-text">' + opt.t + '</span>';
         btn.addEventListener('click', function () {
           answers[i] = opt.d;
           Array.prototype.forEach.call(elOptions.children, function (c) {
@@ -198,14 +212,21 @@
           window.setTimeout(function () {
             if (i + 1 < total) renderStep(i + 1);
             else showResult();
-          }, 180);
+          }, 160);
         });
         elOptions.appendChild(btn);
       });
 
-      try {
-        shell.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      } catch (e) { /* ignore */ }
+      if (i === 0) scrollQuizIntoView();
+      else {
+        try {
+          var topEl = shell.querySelector('.dq-top') || shell;
+          var y = topEl.getBoundingClientRect().top + window.pageYOffset - 70;
+          if (window.pageYOffset > y + 40 || window.pageYOffset < y - 120) {
+            window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+          }
+        } catch (e) { /* ignore */ }
+      }
     }
 
     function computeResult() {
@@ -245,16 +266,17 @@
 
       hide(elQuiz);
       show(elResult);
-      try {
-        shell.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      } catch (e) { /* ignore */ }
+      setMode('done');
+      scrollQuizIntoView();
     }
 
-    function start() {
+    function start(ev) {
+      if (ev) ev.preventDefault();
       answers = new Array(total).fill(null);
       hide(elIntro);
       hide(elResult);
       show(elQuiz);
+      setMode('playing');
       renderStep(0);
     }
 
@@ -262,11 +284,20 @@
       hide(elResult);
       show(elIntro);
       hide(elQuiz);
+      setMode('');
       if (elBar) elBar.style.width = '0%';
+      scrollQuizIntoView();
     }
 
     var startBtn = $('dq-start');
     if (startBtn) startBtn.addEventListener('click', start);
+    var heroStart = $('dq-hero-start');
+    if (heroStart) {
+      heroStart.addEventListener('click', function (ev) {
+        // Уже на странице — стартуем без перезагрузки.
+        if (location.pathname.indexOf('/quiz') !== -1) start(ev);
+      });
+    }
     if (elBack) {
       elBack.addEventListener('click', function () {
         if (current > 0) renderStep(current - 1);
