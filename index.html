@@ -29,7 +29,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <link rel="preload" as="image" href="assets/spectrum-flashes-coloured-light.webp" media="(min-width: 761px)" />
   <link rel="preload" as="image" href="assets/hero_landing_mob.webp" media="(max-width: 760px)" />
-  <link rel="stylesheet" href="css/style.css?v=165" />
+  <link rel="stylesheet" href="css/style.css?v=167" />
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -163,29 +163,25 @@
     </div>
   </section>
 
-  <!-- ─── Тест → отдельная страница ─────────────────── -->
-  <section class="section" id="quiz" aria-labelledby="quiz-teaser-heading">
+  <!-- ─── Тест → отдельная страница (не event-карточка) ─ -->
+  <section class="section quiz-teaser-section" id="quiz" aria-labelledby="quiz-teaser-heading">
     <div class="container">
-      <a class="today-event-yoga-card landing-event-card reveal" href="quiz/" aria-label="Пройти тест «С чего начать»">
-        <div class="today-event-hero">
-          <img src="assets/find_myself.webp" alt="" loading="lazy" decoding="async" />
+      <div class="section-head reveal">
+        <span class="kicker">Навигатор</span>
+        <h2 class="h2" id="quiz-teaser-heading">Не знаете, с чего начать?</h2>
+        <p class="lead">Если направление ещё не выбрано — короткий тест из шести сцен подскажет точку входа и программу внутри Системы.</p>
+      </div>
+      <div class="quiz-banner reveal">
+        <div class="quiz-banner-copy">
+          <span class="quiz-banner-meta">6 сцен · ~2 минуты · без диагнозов</span>
+          <strong>Ситуативный тест «С чего начать»</strong>
+          <p>Не анкета. Выбираете кадры, которые ближе сейчас — получаете маршрут.</p>
         </div>
-        <div class="today-event-body">
-          <p class="today-event-kicker">Тест · 2 минуты</p>
-          <h3 class="today-event-headline" id="quiz-teaser-heading">С чего начать</h3>
-          <p class="today-event-subline">Шесть коротких сцен — не анкета. Система покажет направление и программу, которые сейчас ближе всего.</p>
-          <div class="today-event-footer">
-            <div class="today-event-app">
-              <img class="today-event-icon" src="assets/find_myself.webp" alt="" loading="lazy" decoding="async" />
-              <div class="today-event-appcopy">
-                <strong>Ситуативный тест</strong>
-                <span>Без диагнозов · с маршрутом внутри</span>
-              </div>
-            </div>
-            <span class="today-event-cta">Пройти тест</span>
-          </div>
-        </div>
-      </a>
+        <a class="btn btn-primary quiz-banner-cta" href="quiz/">
+          Пройти тест
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
     </div>
   </section>
 

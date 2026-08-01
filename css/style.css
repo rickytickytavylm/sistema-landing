@@ -534,6 +534,76 @@ h1, h2, h3 { margin: 0; font-weight: 800; letter-spacing: -.04em; }
 
 .section-head.center { margin-inline: auto; text-align: center; }
 
+/* ─── Баннер теста (не event-карточка) ───────────────── */
+
+.quiz-teaser-section .section-head { margin-bottom: 22px; }
+
+.quiz-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px 32px;
+  padding: 22px 26px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line-strong);
+  background: transparent;
+}
+
+.quiz-banner-copy {
+  min-width: 0;
+  flex: 1;
+}
+
+.quiz-banner-meta {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--ink-45);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.quiz-banner-copy strong {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--ink);
+  font-size: clamp(18px, 2.4vw, 22px);
+  font-weight: 800;
+  letter-spacing: -.02em;
+  line-height: 1.2;
+}
+
+.quiz-banner-copy p {
+  margin: 0;
+  max-width: 46ch;
+  color: var(--ink-60);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.quiz-banner-cta {
+  flex-shrink: 0;
+}
+
+.quiz-banner-cta svg {
+  width: 17px;
+  height: 17px;
+}
+
+@media (max-width: 760px) {
+  .quiz-banner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 18px;
+    padding: 20px 18px;
+  }
+
+  .quiz-banner-cta {
+    width: 100%;
+  }
+}
+
 /* ─── Статистика ──────────────────────────────────────── */
 
 .stats {
