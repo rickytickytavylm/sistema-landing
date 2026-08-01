@@ -171,6 +171,7 @@
     .dq-intro p{color:var(--ink-60);font-size:15px;line-height:1.55;margin:0;max-width:510px}
     .dq-start{display:inline-flex;align-items:center;gap:8px}
     .dq-start svg{width:18px;height:18px}
+    .dq-intro[hidden],.dq-quiz[hidden],.dq-result[hidden]{display:none!important}
     .dq-progress{height:2px;border-radius:99px;background:rgba(255,255,255,.12);overflow:hidden;margin-bottom:18px}
     .dq-progress-bar{height:100%;width:0;border-radius:99px;background:var(--ink);transition:width .35s var(--ease-out)}
     .dq-step-meta{font-size:12px;font-weight:800;letter-spacing:.14em;color:var(--ink-45);margin-bottom:12px}
@@ -202,7 +203,7 @@
     .dq-result-actions svg{width:17px;height:17px}
     .dq-restart{margin-top:12px;background:none;border:none;color:var(--ink-45);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit}
     .dq-restart:hover{color:var(--ink)}
-    @media(max-width:640px){.dq-shell{padding:24px 0}.dq-intro{display:block}.dq-start{margin-top:20px}.dq-question{font-size:22px}.dq-result-title{font-size:26px}.dq-program img{width:60px;height:60px}}
+    @media(max-width:640px){.dq-shell{padding:24px 0 8px}.dq-intro{display:block}.dq-intro-copy{margin-bottom:0}.dq-start{margin-top:20px;margin-bottom:28px}.dq-question{font-size:22px}.dq-result-title{font-size:26px}.dq-program img{width:60px;height:60px}}
   </style>
   <section class="section" id="quiz" aria-labelledby="dq-heading">
     <div class="container">
