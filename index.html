@@ -82,13 +82,14 @@
       </a>
       <div class="nav-links">
         <a href="#featured-direction">Созависимость</a>
+        <a href="quiz/">Тест</a>
         <a href="#directions">Направления</a>
         <a href="#features">Возможности</a>
         <a href="#programs">Программы</a>
         <a href="#author">Автор</a>
       </div>
       <div class="nav-cta">
-        <a class="btn btn-ghost btn-sm" href="#directions">Выбрать путь</a>
+        <a class="btn btn-ghost btn-sm" href="quiz/">Пройти тест</a>
         <a class="btn btn-primary btn-sm" href="https://система-молодцова.рф/" target="_blank" rel="noopener">Войти в систему</a>
         <button class="nav-burger" type="button" aria-label="Меню" aria-expanded="false">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
@@ -97,6 +98,7 @@
     </div>
     <div class="nav-mobile">
       <a href="#featured-direction">Созависимость</a>
+      <a href="quiz/">Тест</a>
       <a href="#directions">Направления</a>
       <a href="#features">Возможности</a>
       <a href="#programs">Программы</a>
@@ -161,102 +163,29 @@
     </div>
   </section>
 
-  <!-- ─── Тест-навигатор по направлениям ────────────── -->
-  <style>
-    .dq-shell{max-width:920px;margin:0 auto;border-top:1px solid var(--line-strong);border-bottom:1px solid var(--line);padding:28px 0}
-    .dq-intro{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:28px;align-items:center}
-    .dq-intro-copy{max-width:550px}
-    .dq-intro-eyebrow{display:block;margin-bottom:7px;color:var(--ink-45);font-size:12px;font-weight:800;letter-spacing:.18em;text-transform:uppercase}
-    .dq-intro h3{font-size:clamp(22px,3vw,30px);line-height:1.15;font-weight:800;margin:0 0 8px;color:var(--ink)}
-    .dq-intro p{color:var(--ink-60);font-size:15px;line-height:1.55;margin:0;max-width:510px}
-    .dq-start{display:inline-flex;align-items:center;gap:8px}
-    .dq-start svg{width:18px;height:18px}
-    .dq-intro[hidden],.dq-quiz[hidden],.dq-result[hidden]{display:none!important}
-    .dq-progress{height:2px;border-radius:99px;background:rgba(255,255,255,.12);overflow:hidden;margin-bottom:18px}
-    .dq-progress-bar{height:100%;width:0;border-radius:99px;background:var(--ink);transition:width .35s var(--ease-out)}
-    .dq-step-meta{font-size:12px;font-weight:800;letter-spacing:.14em;color:var(--ink-45);margin-bottom:12px}
-    .dq-question{font-size:clamp(22px,3vw,30px);line-height:1.18;font-weight:800;color:var(--ink);margin:0 0 22px;max-width:650px}
-    .dq-options{display:flex;flex-direction:column;gap:10px}
-    .dq-option{display:flex;align-items:center;gap:13px;width:100%;text-align:left;padding:16px 18px;border-radius:14px;border:1px solid var(--line);background:transparent;color:var(--ink);font-size:15px;font-weight:600;cursor:pointer;transition:border-color .2s,background .2s,transform .12s;font-family:inherit}
-    .dq-option:hover{border-color:var(--line-strong);background:rgba(255,255,255,.045)}
-    .dq-option:active{transform:scale(.995)}
-    .dq-option.is-selected{border-color:rgba(255,255,255,.55);background:rgba(255,255,255,.08)}
-    .dq-option-dot{width:17px;height:17px;border-radius:50%;border:1.5px solid rgba(255,255,255,.36);flex-shrink:0;position:relative;transition:border-color .2s}
-    .dq-option.is-selected .dq-option-dot{border-color:var(--ink)}
-    .dq-option.is-selected .dq-option-dot::after{content:'';position:absolute;inset:3px;border-radius:50%;background:var(--ink)}
-    .dq-back{margin-top:18px;background:none;border:none;color:var(--ink-45);font-size:14px;font-weight:600;cursor:pointer;padding:6px 2px;font-family:inherit}
-    .dq-back:hover{color:var(--ink)}
-    .dq-result{text-align:center}
-    .dq-result-kicker{display:inline-block;font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-45);margin-bottom:8px}
-    .dq-result-title{font-size:clamp(26px,3.5vw,36px);font-weight:800;color:var(--ink);margin:0 0 10px;line-height:1.15}
-    .dq-result-why{color:var(--ink-60);font-size:15px;line-height:1.55;margin:0 auto 24px;max-width:500px}
-    .dq-program{display:flex;align-items:center;gap:16px;text-align:left;padding:12px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.025);text-decoration:none;margin:0 auto 22px;max-width:560px;transition:border-color .2s,background .2s;position:relative}
-    .dq-program:hover{border-color:var(--line-strong);background:rgba(255,255,255,.05)}
-    .dq-program img{width:70px;height:70px;border-radius:11px;object-fit:cover;flex-shrink:0}
-    .dq-program-copy{display:flex;flex-direction:column;gap:3px;min-width:0}
-    .dq-program-label{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-45)}
-    .dq-program-copy strong{font-size:17px;font-weight:800;color:var(--ink)}
-    .dq-program-copy span:last-child{font-size:13px;color:var(--ink-60);line-height:1.4}
-    .dq-program .dir-card-arrow{margin-left:auto;flex-shrink:0}
-    .dq-result-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:6px}
-    .dq-result-actions .btn{display:inline-flex;align-items:center;gap:8px}
-    .dq-result-actions svg{width:17px;height:17px}
-    .dq-restart{margin-top:12px;background:none;border:none;color:var(--ink-45);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit}
-    .dq-restart:hover{color:var(--ink)}
-    @media(max-width:640px){.dq-shell{padding:24px 0 8px}.dq-intro{display:block}.dq-intro-copy{margin-bottom:0}.dq-start{margin-top:20px;margin-bottom:28px}.dq-question{font-size:22px}.dq-result-title{font-size:26px}.dq-program img{width:60px;height:60px}}
-  </style>
-  <section class="section" id="quiz" aria-labelledby="dq-heading">
+  <!-- ─── Тест → отдельная страница ─────────────────── -->
+  <section class="section" id="quiz" aria-labelledby="quiz-teaser-heading">
     <div class="container">
-      <div class="section-head center reveal">
-        <span class="kicker">Тест · 1 минута</span>
-        <h2 class="h2" id="dq-heading">Не знаете, с чего начать?</h2>
-        <p class="lead">Ответьте на пять вопросов — Система подскажет ваше направление и программу, с которой стоит начать.</p>
-      </div>
-
-      <div class="dq-shell reveal" id="dq-shell">
-        <div class="dq-intro" id="dq-intro">
-          <div class="dq-intro-copy">
-            <span class="dq-intro-eyebrow">Пять коротких вопросов</span>
-            <h3>Подобрать направление</h3>
-            <p>Без диагнозов и правильных ответов. Просто выберите, что ближе прямо сейчас.</p>
-          </div>
-          <button class="btn btn-primary dq-start" type="button" id="dq-start">
-            Начать тест
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </button>
+      <a class="today-event-yoga-card landing-event-card reveal" href="quiz/" aria-label="Пройти тест «С чего начать»">
+        <div class="today-event-hero">
+          <img src="assets/find_myself.webp" alt="" loading="lazy" decoding="async" />
         </div>
-
-        <div class="dq-quiz" id="dq-quiz" hidden>
-          <div class="dq-progress"><div class="dq-progress-bar" id="dq-progress-bar"></div></div>
-          <div class="dq-step-meta"><span id="dq-step-num">1</span> / <span id="dq-step-total">5</span></div>
-          <h3 class="dq-question" id="dq-question"></h3>
-          <div class="dq-options" id="dq-options"></div>
-          <button class="dq-back" type="button" id="dq-back" hidden>← Назад</button>
-        </div>
-
-        <div class="dq-result" id="dq-result" hidden>
-          <span class="dq-result-kicker">Ваше направление</span>
-          <h3 class="dq-result-title" id="dq-result-title"></h3>
-          <p class="dq-result-why" id="dq-result-why"></p>
-          <a class="dq-program" id="dq-program" href="#">
-            <img id="dq-program-img" src="" alt="" loading="lazy" />
-            <div class="dq-program-copy">
-              <span class="dq-program-label">Начните с программы</span>
-              <strong id="dq-program-name"></strong>
-              <span id="dq-program-desc"></span>
+        <div class="today-event-body">
+          <p class="today-event-kicker">Тест · 2 минуты</p>
+          <h3 class="today-event-headline" id="quiz-teaser-heading">С чего начать</h3>
+          <p class="today-event-subline">Шесть коротких сцен — не анкета. Система покажет направление и программу, которые сейчас ближе всего.</p>
+          <div class="today-event-footer">
+            <div class="today-event-app">
+              <img class="today-event-icon" src="assets/find_myself.webp" alt="" loading="lazy" decoding="async" />
+              <div class="today-event-appcopy">
+                <strong>Ситуативный тест</strong>
+                <span>Без диагнозов · с маршрутом внутри</span>
+              </div>
             </div>
-            <span class="dir-card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></span>
-          </a>
-          <div class="dq-result-actions">
-            <a class="btn btn-primary" id="dq-open-route" href="#">
-              Открыть маршрут
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
-            <a class="btn btn-ghost" href="https://система-молодцова.рф/" target="_blank" rel="noopener">Войти в систему</a>
+            <span class="today-event-cta">Пройти тест</span>
           </div>
-          <button class="dq-restart" type="button" id="dq-restart">Пройти заново</button>
         </div>
-      </div>
+      </a>
     </div>
   </section>
 
@@ -506,6 +435,5 @@
   </svg>
 
   <script src="js/main.js"></script>
-  <script src="js/direction-quiz.js?v=1"></script>
 </body>
 </html>
