@@ -27,7 +27,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../css/style.css?v=166" />
+  <link rel="stylesheet" href="../css/style.css?v=168" />
   <style>
     /* Quiz page — mobile-first */
     .quiz-page .dir-hero{transition:padding .35s var(--ease-out)}
@@ -40,21 +40,19 @@
     .dq-intro p{color:var(--ink-60);font-size:15px;line-height:1.55;margin:0 0 22px;max-width:40ch}
     .dq-intro .btn{min-height:52px;width:100%;max-width:320px}
     .dq-intro[hidden],.dq-quiz[hidden],.dq-result[hidden]{display:none!important}
-    .dq-top{margin:0 0 18px}
-    .dq-progress{height:3px;border-radius:99px;background:rgba(255,255,255,.1);overflow:hidden;margin-bottom:12px}
+
+    .dq-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 14px}
+    .dq-progress{flex:1;height:3px;border-radius:99px;background:rgba(255,255,255,.1);overflow:hidden}
     .dq-progress-bar{height:100%;width:0;border-radius:99px;background:var(--ink);transition:width .35s var(--ease-out)}
-    .dq-step-meta{font-size:12px;font-weight:800;letter-spacing:.14em;color:var(--ink-45);text-transform:uppercase}
-    .dq-q-kicker{font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-45);margin:0 0 8px}
-    .dq-question{font-size:clamp(22px,6.2vw,30px);line-height:1.2;font-weight:800;color:var(--ink);margin:0 0 18px;letter-spacing:-.03em}
-    .dq-options{display:flex;flex-direction:column;gap:8px}
-    .dq-option{-webkit-tap-highlight-color:transparent;display:flex;align-items:center;width:100%;min-height:56px;text-align:left;padding:14px 16px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--ink);font-size:15px;font-weight:600;line-height:1.35;cursor:pointer;transition:border-color .18s,background .18s,transform .1s;font-family:inherit}
+    .dq-step-meta{flex-shrink:0;font-size:12px;font-weight:800;letter-spacing:.14em;color:var(--ink-45);text-transform:uppercase;font-variant-numeric:tabular-nums}
+    .dq-q-kicker{font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-45);margin:0 0 6px}
+    .dq-question{font-size:clamp(20px,5.6vw,28px);line-height:1.2;font-weight:800;color:var(--ink);margin:0 0 14px;letter-spacing:-.03em}
+    .dq-options{display:flex;flex-direction:column;gap:7px}
+    .dq-option{-webkit-tap-highlight-color:transparent;display:flex;align-items:center;width:100%;min-height:48px;text-align:left;padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--ink);font-size:14px;font-weight:600;line-height:1.3;cursor:pointer;transition:border-color .18s,background .18s,transform .1s;font-family:inherit}
     .dq-option:active{transform:scale(.985);background:rgba(255,255,255,.07)}
     .dq-option.is-selected{border-color:rgba(255,255,255,.55);background:rgba(255,255,255,.1)}
     .dq-option-text{flex:1;min-width:0}
-    .dq-option-dot{display:none}
-    .dq-nav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:18px;padding-bottom:8px}
-    .dq-back{background:none;border:none;color:var(--ink-45);font-size:15px;font-weight:650;cursor:pointer;padding:10px 0;min-height:44px;font-family:inherit}
-    .dq-back:hover{color:var(--ink)}
+
     .dq-result-tag{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-45);margin-bottom:8px}
     .dq-result-title{font-size:clamp(26px,7vw,38px);font-weight:800;color:var(--ink);margin:0 0 12px;line-height:1.12;letter-spacing:-.035em}
     .dq-result-why{color:var(--ink-60);font-size:15px;line-height:1.6;margin:0 0 22px}
@@ -72,36 +70,125 @@
     .dq-restart:hover{color:var(--ink)}
     .dq-note{margin-top:28px;padding-top:18px;border-top:1px solid var(--line);color:var(--ink-45);font-size:12px;line-height:1.5}
 
-    /* Playing: compact focus mode (especially mobile) */
-    body.dq-playing .dir-hero{padding:max(96px,calc(72px + env(safe-area-inset-top))) 0 20px}
-    body.dq-playing .dir-hero .breadcrumbs,
-    body.dq-playing .dir-hero .lead,
-    body.dq-playing .dir-hero-actions{display:none}
-    body.dq-playing .dir-hero .kicker{margin-bottom:8px}
-    body.dq-playing .dir-hero .display{font-size:clamp(28px,8vw,40px);max-width:none}
-    body.dq-playing .dir-hero .card-media{opacity:.28}
-    body.dq-playing .section-quiz{padding-top:12px}
-    body.dq-playing .dq-top{
-      position:sticky;top:calc(58px + env(safe-area-inset-top,0px));z-index:30;
-      margin:0 0 14px;padding:10px 0 8px;
-      background:linear-gradient(180deg,rgba(5,7,13,.96) 40%,rgba(5,7,13,.88) 100%);
-      -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+    /* Шапка как в приложении: назад слева, лого по центру */
+    .dq-nav-back{
+      display:none;
+      width:40px;height:40px;padding:0;border-radius:50%;
+      border:1px solid rgba(255,255,255,.16);
+      background:radial-gradient(circle at 40% 20%,rgba(255,255,255,.18),transparent 52%),rgba(255,255,255,.06);
+      color:rgba(255,255,255,.86);
+      align-items:center;justify-content:center;
+      cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;
+      flex-shrink:0;
     }
+    .dq-nav-back svg{width:18px;height:18px;display:block}
+    .dq-nav-spacer{display:none;width:40px;height:40px;flex-shrink:0}
+
+    body.dq-playing .nav,
+    body.dq-done .nav{
+      background:
+        linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.015)),
+        rgba(7,9,15,.78);
+      border-color:var(--line);
+      -webkit-backdrop-filter:blur(24px) saturate(170%);
+      backdrop-filter:blur(24px) saturate(170%);
+      box-shadow:0 18px 48px rgba(0,0,0,.32),inset 0 1px 0 rgba(255,255,255,.1);
+    }
+    body.dq-playing .nav-inner,
+    body.dq-done .nav-inner{
+      display:grid;
+      grid-template-columns:40px 1fr 40px;
+      align-items:center;
+      gap:8px;
+      min-height:56px;
+      padding:0 12px;
+    }
+    body.dq-playing .dq-nav-back,
+    body.dq-done .dq-nav-back{display:inline-flex}
+    body.dq-playing .dq-nav-spacer,
+    body.dq-done .dq-nav-spacer{display:block}
+    body.dq-playing .nav-brand,
+    body.dq-done .nav-brand{
+      grid-column:2;
+      justify-self:center;
+    }
+    body.dq-playing .nav-brand img,
+    body.dq-done .nav-brand img{height:44px}
+    body.dq-playing .nav-links,
+    body.dq-playing .nav-cta,
+    body.dq-playing .nav-mobile,
+    body.dq-done .nav-links,
+    body.dq-done .nav-cta,
+    body.dq-done .nav-mobile{display:none!important}
+    body.dq-playing .nav.menu-open .nav-mobile,
+    body.dq-done .nav.menu-open .nav-mobile{display:none!important}
+
+    /* Playing: убираем hero — экран только под вопросы */
+    body.dq-playing .dir-hero{display:none}
+    body.dq-playing .section-quiz{
+      padding-top:calc(86px + env(safe-area-inset-top,0px));
+      padding-bottom:max(28px,env(safe-area-inset-bottom));
+      min-height:100svh;
+    }
+    body.dq-playing .footer{display:none}
+    body.dq-playing .dq-top{
+      position:sticky;
+      top:calc(78px + env(safe-area-inset-top,0px));
+      z-index:30;
+      margin:0 0 12px;
+      padding:8px 0 10px;
+      background:linear-gradient(180deg,rgba(5,7,13,.97) 55%,rgba(5,7,13,.82) 100%);
+      -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+    }
+
     body.dq-done .dir-hero{padding:max(96px,calc(72px + env(safe-area-inset-top))) 0 20px}
     body.dq-done .dir-hero .lead,
-    body.dq-done .dir-hero-actions{display:none}
+    body.dq-done .dir-hero-actions,
+    body.dq-done .dir-hero .breadcrumbs{display:none}
     body.dq-done .dir-hero .display{font-size:clamp(28px,8vw,40px)}
+    body.dq-done .section-quiz{padding-top:12px}
+
+    @media (max-width:760px){
+      body.dq-playing .section-quiz{
+        padding-top:calc(78px + env(safe-area-inset-top,0px));
+      }
+      body.dq-playing .dq-top{
+        top:calc(70px + env(safe-area-inset-top,0px));
+      }
+      body.dq-playing .dq-question{
+        font-size:clamp(18px,5.2vw,22px);
+        margin:0 0 10px;
+      }
+      body.dq-playing .dq-q-kicker{margin:0 0 4px}
+      body.dq-playing .dq-options{gap:6px}
+      body.dq-playing .dq-option{
+        min-height:44px;
+        padding:10px 12px;
+        font-size:13.5px;
+        border-radius:12px;
+        line-height:1.28;
+      }
+    }
 
     @media (min-width:761px){
       .dq-intro .btn{width:auto}
-      .dq-option{font-size:16px;padding:16px 18px;min-height:58px}
+      .dq-option{font-size:15px;padding:14px 16px;min-height:52px}
       .dq-option:hover{border-color:var(--line-strong);background:rgba(255,255,255,.055)}
-      .dq-question{max-width:22ch}
+      .dq-question{max-width:24ch}
       .dq-result-actions{flex-direction:row;flex-wrap:wrap}
       .dq-result-actions .btn{width:auto}
       .dq-program .dir-card-arrow{display:flex;margin-left:auto}
       .dq-program img{width:74px;height:74px}
-      body.dq-playing .dq-top{top:72px}
+      body.dq-playing .dq-top{top:84px}
+      body.dq-playing .section-quiz{padding-top:110px}
+    }
+
+    /* Короткие экраны: ещё плотнее */
+    @media (max-width:760px) and (max-height:740px){
+      body.dq-playing .dq-question{font-size:17px;margin:0 0 8px}
+      body.dq-playing .dq-option{min-height:40px;padding:9px 11px;font-size:13px}
+      body.dq-playing .dq-options{gap:5px}
+      body.dq-playing .dq-top{margin:0 0 8px;padding:6px 0 8px}
     }
   </style>
 </head>
@@ -109,9 +196,13 @@
 
   <nav class="nav" aria-label="Главная навигация">
     <div class="nav-inner">
+      <button class="dq-nav-back" type="button" id="dq-nav-back" aria-label="Назад" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
       <a href="../" class="nav-brand">
         <img src="../assets/logo2-Photoroom.webp" alt="Система" />
       </a>
+      <span class="dq-nav-spacer" aria-hidden="true"></span>
       <div class="nav-links">
         <a href="../#directions">Направления</a>
         <a href="../#features">Возможности</a>
@@ -181,9 +272,6 @@
             <p class="dq-q-kicker" id="dq-q-kicker">Сцена</p>
             <h3 class="dq-question" id="dq-question"></h3>
             <div class="dq-options" id="dq-options"></div>
-            <div class="dq-nav">
-              <button class="dq-back" type="button" id="dq-back" hidden>← Назад</button>
-            </div>
           </div>
 
           <div class="dq-result" id="dq-result" hidden>
@@ -253,6 +341,6 @@
   </footer>
 
   <script src="../js/main.js"></script>
-  <script src="../js/direction-quiz.js?v=4"></script>
+  <script src="../js/direction-quiz.js?v=5"></script>
 </body>
 </html>

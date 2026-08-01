@@ -29,7 +29,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <link rel="preload" as="image" href="assets/spectrum-flashes-coloured-light.webp" media="(min-width: 761px)" />
   <link rel="preload" as="image" href="assets/hero_landing_mob.webp" media="(max-width: 760px)" />
-  <link rel="stylesheet" href="css/style.css?v=167" />
+  <link rel="stylesheet" href="css/style.css?v=168" />
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -171,17 +171,24 @@
         <h2 class="h2" id="quiz-teaser-heading">Не знаете, с чего начать?</h2>
         <p class="lead">Если направление ещё не выбрано — короткий тест из шести сцен подскажет точку входа и программу внутри Системы.</p>
       </div>
-      <div class="quiz-banner reveal">
+      <a class="quiz-banner reveal" href="quiz/" aria-label="Пройти ситуативный тест «С чего начать»">
         <div class="quiz-banner-copy">
-          <span class="quiz-banner-meta">6 сцен · ~2 минуты · без диагнозов</span>
+          <div class="quiz-banner-chips" aria-hidden="true">
+            <span>6 сцен</span>
+            <span>~2 мин</span>
+            <span>без диагнозов</span>
+          </div>
           <strong>Ситуативный тест «С чего начать»</strong>
-          <p>Не анкета. Выбираете кадры, которые ближе сейчас — получаете маршрут.</p>
+          <p>Не анкета. Выбираете кадры, которые ближе сейчас — получаете направление и программу.</p>
+          <span class="quiz-banner-cta">
+            Пройти тест
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </span>
         </div>
-        <a class="btn btn-primary quiz-banner-cta" href="quiz/">
-          Пройти тест
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-      </div>
+        <div class="quiz-banner-media" aria-hidden="true">
+          <img src="assets/find_myself.webp" alt="" loading="lazy" decoding="async" />
+        </div>
+      </a>
     </div>
   </section>
 

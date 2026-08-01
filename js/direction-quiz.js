@@ -163,7 +163,8 @@
     var elBar = $('dq-progress-bar');
     var elStepNum = $('dq-step-num');
     var elStepTotal = $('dq-step-total');
-    var elBack = $('dq-back');
+    var elNavBack = $('dq-nav-back');
+    var nav = document.querySelector('.quiz-page .nav');
 
     var total = QUESTIONS.length;
     var answers = new Array(total).fill(null);
@@ -177,14 +178,15 @@
     function setMode(mode) {
       document.body.classList.toggle('dq-playing', mode === 'playing');
       document.body.classList.toggle('dq-done', mode === 'done');
+      if (nav) nav.classList.remove('menu-open');
+      if (elNavBack) elNavBack.hidden = !(mode === 'playing' || mode === 'done');
     }
 
-    function scrollQuizIntoView() {
+    function scrollQuizTop() {
       try {
-        var top = shell.getBoundingClientRect().top + window.pageYOffset - 72;
-        window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       } catch (e) {
-        try { shell.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (err) { /* ignore */ }
+        try { window.scrollTo(0, 0); } catch (err) { /* ignore */ }
       }
     }
 
@@ -195,7 +197,6 @@
       if (elBar) elBar.style.width = Math.round(((i + 0.15) / total) * 100) + '%';
       if (elKicker) elKicker.textContent = step.kicker;
       if (elQuestion) elQuestion.textContent = step.q;
-      if (elBack) elBack.hidden = i === 0;
 
       elOptions.innerHTML = '';
       step.options.forEach(function (opt) {
@@ -217,16 +218,7 @@
         elOptions.appendChild(btn);
       });
 
-      if (i === 0) scrollQuizIntoView();
-      else {
-        try {
-          var topEl = shell.querySelector('.dq-top') || shell;
-          var y = topEl.getBoundingClientRect().top + window.pageYOffset - 70;
-          if (window.pageYOffset > y + 40 || window.pageYOffset < y - 120) {
-            window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
-          }
-        } catch (e) { /* ignore */ }
-      }
+      scrollQuizTop();
     }
 
     function computeResult() {
@@ -278,7 +270,23 @@
       hide(elQuiz);
       show(elResult);
       setMode('done');
-      scrollQuizIntoView();
+      scrollQuizTop();
+    }
+
+    function exitToIntro() {
+      hide(elResult);
+      hide(elQuiz);
+      show(elIntro);
+      setMode('');
+      answers = new Array(total).fill(null);
+      current = 0;
+      if (elBar) elBar.style.width = '0%';
+      try {
+        if (history.replaceState) {
+          history.replaceState(null, '', location.pathname);
+        }
+      } catch (e) { /* ignore */ }
+      scrollQuizTop();
     }
 
     function start(ev) {
@@ -292,12 +300,23 @@
     }
 
     function restart() {
-      hide(elResult);
-      show(elIntro);
-      hide(elQuiz);
-      setMode('');
-      if (elBar) elBar.style.width = '0%';
-      scrollQuizIntoView();
+      exitToIntro();
+    }
+
+    function goBack() {
+      if (document.body.classList.contains('dq-done')) {
+        // С результата — снова к вопросам с последнего шага, или к интро.
+        hide(elResult);
+        show(elQuiz);
+        setMode('playing');
+        renderStep(Math.max(0, total - 1));
+        return;
+      }
+      if (current > 0) {
+        renderStep(current - 1);
+        return;
+      }
+      exitToIntro();
     }
 
     var startBtn = $('dq-start');
@@ -309,10 +328,8 @@
         if (location.pathname.indexOf('/quiz') !== -1) start(ev);
       });
     }
-    if (elBack) {
-      elBack.addEventListener('click', function () {
-        if (current > 0) renderStep(current - 1);
-      });
+    if (elNavBack) {
+      elNavBack.addEventListener('click', goBack);
     }
     var restartBtn = $('dq-restart');
     if (restartBtn) restartBtn.addEventListener('click', restart);
