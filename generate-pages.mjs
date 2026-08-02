@@ -39,6 +39,7 @@ const DIRECTIONS = [
       { pill: 'Основная программа', title: 'Гештальт-подход', image: 'courses.webp', text: 'Эмоции, потребности, контакт и границы. Последовательный видео-курс: от теории контакта до практик возвращения к себе.' },
       { pill: 'Дополнительная', title: 'Гипноз', image: 'hipno.webp', text: 'Внимание, трансовые состояния и безопасная работа с внушением. Расширяет основную программу работой с состояниями.' },
     ],
+    tools: { title: 'Инструменты самопонимания', text: 'Защиты психики, словарь самопонимания, связь чувств с потребностями и антивирус самообмана — для бережного исследования себя.' },
   },
   {
     slug: 'calm',
@@ -64,6 +65,7 @@ const DIRECTIONS = [
       { pill: 'Основная программа', title: 'Мини-йога', image: 'mini-yoga.webp', text: 'Мягкое начало через дыхание и движение. Короткие практики, которые встраиваются даже в плотный день.' },
       { pill: 'Дополнительная', title: 'Телесная терапия', image: 'theraphy.webp', text: 'Вернуть внимание в тело и снизить внутреннее напряжение. Практики заземления и контакта с ощущениями.' },
     ],
+    tools: { title: 'Инструменты заботы о себе', text: 'Сигналы тела, словарь практик, мягкие разрешения и антивирус напряжения — короткие карточки со свайпом на вкладке «Сегодня».' },
   },
   {
     slug: 'body',
@@ -82,6 +84,7 @@ const DIRECTIONS = [
       { pill: 'Основная программа', title: 'Психосоматика', image: 'psysomatic.webp', text: 'Связь эмоций, стресса и телесных симптомов. Разборы реальных случаев и психодраматические техники работы с симптомом.' },
       { pill: 'Дополнительная', title: 'Телесная терапия', image: 'theraphy.webp', text: 'Практики, которые возвращают внимание в тело: заземление, дыхание, работа с напряжением.' },
     ],
+    tools: { title: 'Инструменты тела и симптомов', text: 'Мифы психосоматики, словарь тела, диалог с симптомом и антивирус телесной тревоги — без самодиагностики и опасных упрощений.' },
   },
   {
     slug: 'relationships',
@@ -100,6 +103,8 @@ const DIRECTIONS = [
       { pill: 'Основная программа', title: 'Созависимость', image: 'coda2.webp', text: 'Границы, привязанность и повторяющиеся сценарии. Психологические игры созависимых и выход из них.' },
       { pill: 'Дополнительная', title: 'Мужское и Женское', image: 'man_woman.webp', text: 'Психология отношений и природа полов: роли, ожидания и зрелый контакт.' },
     ],
+    focusApp: true,
+    tools: { title: 'Инструменты на «Сегодня»', text: 'В направлении — карточки: иллюзии зависимого, словарь, я-высказывания и эмоциональный антивирус. Короткие практики рядом с программами, без отдельного «курса ради курса».' },
   },
   {
     slug: 'selfworth',
@@ -118,6 +123,7 @@ const DIRECTIONS = [
       { pill: 'Основная программа', title: 'Работа с травмами', image: 'geshtalt.webp', text: 'Кризисы, травматичный опыт и восстановление опоры. Практический курс о том, как тело и психика проживают сложное.' },
       { pill: 'Дополнительная', title: 'Гештальт-подход', image: 'courses.webp', text: 'Контакт, эмоции, границы и возвращение к себе. Базовая программа Системы как поддержка маршрута.' },
     ],
+    tools: { title: 'Инструменты внутренней опоры', text: 'Иллюзии самооценки, словарь опоры, перевод критика в поддержку и антивирус стыда — в коротких карточках на «Сегодня».' },
   },
   {
     slug: 'communication',
@@ -136,6 +142,7 @@ const DIRECTIONS = [
       { pill: 'Основная программа', title: 'Мастер Коммуникаций', image: 'masterofcommication.webp', text: 'Навыки общения, диалог и управление конфликтом. Включая практики распознавания лжи и скрытых мотивов.' },
       { pill: 'Дополнительная', title: 'Созависимость', image: 'coda2.webp', text: 'Границы и повторяющиеся сценарии в контакте, фундамент зрелой коммуникации.' },
     ],
+    tools: { title: 'Инструменты диалога', text: 'Ловушки спора, словарь диалога, конструктивные реплики и антивирус эскалации — карточки для практики общения на «Сегодня».' },
   },
 ];
 
@@ -299,6 +306,136 @@ const AUTHOR_PAGE = {
   facts: ['Гештальт-подход', 'Телесная терапия', 'Психосоматика', 'Гипнотерапия', 'Йога и практики'],
 };
 
+// SEO-лендинги под небрендовые запросы (узкие + широкие). Каждая — root-уровень (/slug/), depth 1.
+const SEO_PAGES = [
+  {
+    slug: 'podbor-psihologa',
+    tag: 'Подбор',
+    title: 'Подбор психолога',
+    seoTitle: 'Подбор психолога онлайн — с чего начать | Система Молодцова',
+    titleHtml: 'Подбор психолога<br /><span class="text-gradient">под ваш запрос</span>',
+    description:
+      'Поможем подобрать психолога и направление под ваш запрос: тревога, отношения, самооценка, психосоматика. Бесплатный тест из шести сцен подскажет точку входа.',
+    keywords:
+      'подбор психолога, как выбрать психолога, подобрать психолога онлайн, психолог под запрос, к какому психологу обратиться, система молодцова',
+    hero: 'find_myself.webp',
+    schemaType: 'Service',
+    serviceType: 'Подбор психолога',
+    lead:
+      'Не обязательно знать точный диагноз, чтобы начать. Короткий тест и понятные направления помогают выбрать, с чего начать и какой специалист или программа подойдёт именно вам.',
+    intro: [
+      'Подбор психолога — это не про «найти самого известного», а про совпадение запроса, метода и человека. Один и тот же симптом (тревога, усталость, конфликты) у разных людей растёт из разного, поэтому Система начинает с вашей ситуации, а не с ярлыка.',
+      'Внутри Системы Молодцова шесть направлений — точек входа. Каждое ведёт к подобранным программам и специалистам, а AI-помощник и специалист по подбору помогают сориентироваться, если сомневаетесь.',
+    ],
+    signsKicker: 'Когда это про вас',
+    signsTitle: 'Подбор пригодится, если',
+    signs: [
+      { title: 'Не знаете, с чего начать', text: 'Запросов много и они путаются между собой. Тест из шести сцен собирает их в одно понятное направление.' },
+      { title: 'Боитесь «не того» специалиста', text: 'Подбор идёт от метода и запроса: гештальт, психосоматика, телесная терапия — видно, что и зачем.' },
+      { title: 'Хотите попробовать без обязательств', text: 'Первый шаг бесплатный: тест и вводные материалы. Дальше решаете сами, в своём темпе.' },
+    ],
+    helpKicker: 'Как это работает',
+    helpTitle: 'Подбор в три шага',
+    help: [
+      { title: 'Пройдите короткий тест', text: 'Шесть ситуаций, около двух минут, без анкет и диагнозов. На выходе — направление и программа.' },
+      { title: 'Получите маршрут', text: 'Система показывает основную и дополнительную программу и следующий шаг — не нужно искать по всей библиотеке.' },
+      { title: 'Подключите специалиста', text: 'Если нужен человек рядом — специалист по подбору и психологи Системы помогут двигаться дальше.' },
+    ],
+    faq: [
+      { q: 'Как понять, какой психолог мне нужен?', a: 'Отталкивайтесь от запроса, а не от названия метода. Пройдите тест «С чего начать» — он переведёт ваше состояние (тревога, отношения, самооценка, тело) в конкретное направление и программу. Дальше можно углубляться самостоятельно или со специалистом.' },
+      { q: 'Чем подбор в Системе отличается от каталога психологов?', a: 'Каталог даёт список анкет, а Система — маршрут: сначала направление под ваш запрос, затем подобранные программы, практики и поддержка. Это снижает риск «попал не к тому» и не оставляет один на один с выбором.' },
+      { q: 'Это бесплатно?', a: 'Тест и вводные материалы бесплатны. Доступ к полным программам — по подписке внутри платформы, начать можно с пробного шага.' },
+      { q: 'Подойдёт ли онлайн-формат?', a: 'Да. Все направления и программы работают онлайн по всей России — заниматься можно в своём темпе с телефона или компьютера.' },
+    ],
+    related: ['selfstudy', 'relationships', 'selfworth', 'calm'],
+    cta: { title: 'Начните подбор с короткого теста', text: 'Шесть сцен, пара минут — и у вас понятное направление и первый шаг.' },
+  },
+  {
+    slug: 'psihologicheskaya-pomosch',
+    tag: 'Помощь',
+    title: 'Психологическая помощь',
+    seoTitle: 'Психологическая помощь онлайн | Система Молодцова',
+    titleHtml: 'Психологическая помощь<br /><span class="text-gradient">онлайн</span>',
+    description:
+      'Психологическая помощь онлайн: направления под тревогу, отношения, самооценку и психосоматику, программы, практики и поддержка. Начните с бесплатного теста.',
+    keywords:
+      'психологическая помощь, психологическая помощь онлайн, помощь психолога, куда обратиться за психологической помощью, психологическая поддержка, система молодцова',
+    hero: 'opora.webp',
+    schemaType: 'Service',
+    serviceType: 'Психологическая помощь онлайн',
+    lead:
+      'Когда тяжело, важно не «собраться», а получить понятный первый шаг. Система собирает психологическую помощь в маршрут: направление под ваш запрос, программы и практики, поддержка специалиста и сообщества.',
+    intro: [
+      'Психологическая помощь бывает разной: кому-то нужна информация и практики, кому-то — программа с сопровождением, кому-то — живой контакт со специалистом. Система не навязывает один формат, а помогает выбрать подходящий по вашему состоянию.',
+      'Материалы платформы носят образовательный характер и не заменяют экстренную или медицинскую помощь. Если есть угроза жизни или тяжёлое состояние — обратитесь в скорую (103) или на линию психологической помощи.',
+    ],
+    signsKicker: 'Когда стоит обратиться',
+    signsTitle: 'Это повод не терпеть',
+    signs: [
+      { title: 'Тревога и напряжение не отпускают', text: 'Постоянное внутреннее беспокойство, сложно расслабиться и уснуть — с этим можно и нужно работать.' },
+      { title: 'Отношения по кругу', text: 'Одни и те же конфликты и сценарии, ощущение, что растворяетесь в другом.' },
+      { title: 'Нет опоры и сил', text: 'После кризиса, потери или выгорания привычные опоры не держат — важно пересобрать фундамент.' },
+    ],
+    helpKicker: 'Какая помощь внутри',
+    helpTitle: 'Не советы, а инструменты',
+    help: [
+      { title: 'Направление под запрос', text: 'Шесть точек входа: спокойствие, тело, отношения, опора, коммуникация, самопознание.' },
+      { title: 'Программы и практики', text: 'Видео-уроки, медитации и марафоны — конкретные инструменты, а не общие советы.' },
+      { title: 'Поддержка рядом', text: 'AI-помощник Лиза, специалист по подбору и сообщество помогают не бросить на полпути.' },
+    ],
+    faq: [
+      { q: 'Куда обратиться за психологической помощью онлайн?', a: 'Начните с бесплатного теста «С чего начать»: он подскажет направление и программу под ваш запрос. Дальше можно заниматься самостоятельно, подключить практики или специалиста по подбору. Всё работает онлайн.' },
+      { q: 'Психологическая помощь — это платно?', a: 'Тест и вводные материалы бесплатны. Полные программы и практики доступны по подписке внутри платформы; начать можно с пробного шага.' },
+      { q: 'Чем это отличается от разовой консультации?', a: 'Разовая консультация решает точечный вопрос, а Система даёт маршрут: последовательные программы, практики и поддержку, чтобы изменения закреплялись, а не «до следующего срыва».' },
+      { q: 'Что делать в остром состоянии?', a: 'Если есть угроза жизни или тяжёлое состояние — это зона экстренной и медицинской помощи: звоните 103 или на телефон доверия. Материалы платформы носят образовательный характер и не заменяют врача.' },
+    ],
+    related: ['calm', 'relationships', 'selfworth', 'body'],
+    cta: { title: 'Первый шаг — бесплатный тест', text: 'Он подскажет направление и программу под ваш запрос за пару минут.' },
+  },
+  {
+    slug: 'trevoga',
+    tag: 'Тревога',
+    title: 'Тревога: что с ней делать',
+    seoTitle: 'Тревога: что это и что с ней делать | Система Молодцова',
+    titleHtml: 'Тревога:<br /><span class="text-gradient">что с ней делать</span>',
+    description:
+      'Что такое тревога, почему она возникает и что с ней делать: дыхание, заземление и практики при тревоге и панических атаках. Направление «Спокойствие» в Системе.',
+    keywords:
+      'тревога, как справиться с тревогой, что делать при тревоге, постоянная тревога, панические атаки что делать, тревожность, чувство тревоги без причины',
+    hero: 'king_calm.webp',
+    schemaType: 'Article',
+    lead:
+      'Тревога — это не «слабость характера», а сигнал нервной системы. С ней можно научиться обращаться: снижать обороты в моменте и укреплять устойчивость вдолгую.',
+    intro: [
+      'Тревога — естественная реакция на неопределённость и угрозу. Проблемой она становится, когда включается без реальной опасности, держится фоном и мешает жить: сложно уснуть, расслабиться, сосредоточиться. Часто добавляются телесные симптомы — сердцебиение, ком в горле, поверхностное дыхание.',
+      'Хорошая новость: тревога хорошо поддаётся работе. В моменте помогают дыхание и заземление, а вдолгую — регулярные практики и понимание того, что именно её запускает. Ниже — короткая карта, что делать.',
+    ],
+    signsKicker: 'Как проявляется',
+    signsTitle: 'Знакомо?',
+    signs: [
+      { title: 'Тревога «фоном»', text: 'Внутренний моторчик не выключается даже вечером, мысли крутятся по кругу.' },
+      { title: 'Тело в напряжении', text: 'Сжатая челюсть, плечи у ушей, поверхностное дыхание, проблемы со сном.' },
+      { title: 'Панические волны', text: 'Резкое сердцебиение, страх, ощущение «теряю контроль» — пик, который проходит.' },
+    ],
+    helpKicker: 'Что делать',
+    helpTitle: 'В моменте и вдолгую',
+    help: [
+      { title: 'В моменте — дыхание', text: 'Удлиняйте выдох: вдох на 4, выдох на 6–8. Долгий выдох переключает нервную систему в режим успокоения.' },
+      { title: 'Верните себя в «здесь»', text: 'Заземление 5-4-3-2-1: назовите, что видите, слышите и чувствуете телом. Внимание возвращается из мыслей в реальность.' },
+      { title: 'Вдолгую — регулярность', text: 'Короткие практики и медитации каждый день снижают базовый уровень тревоги. Направление «Спокойствие» собирает их в маршрут.' },
+    ],
+    faq: [
+      { q: 'Что делать при приступе тревоги прямо сейчас?', a: 'Замедлите дыхание с длинным выдохом (вдох 4 — выдох 6–8) и сделайте заземление 5-4-3-2-1: назовите пять вещей, которые видите, четыре, которые слышите, и так далее. Это возвращает внимание в тело и снижает пик за несколько минут.' },
+      { q: 'Почему тревога возникает «без причины»?', a: 'Причина обычно есть, просто она не осознаётся: накопленное напряжение, недосып, непрожитые эмоции, хронический стресс. Тело реагирует раньше, чем мы понимаем словами. Регулярные практики и работа с состояниями помогают увидеть триггеры.' },
+      { q: 'Чем тревога отличается от панической атаки?', a: 'Тревога — более длительный фон беспокойства. Паническая атака — резкий короткий пик с сильными телесными симптомами (сердцебиение, страх), который достигает максимума за минуты и проходит. Приёмы дыхания и заземления помогают в обоих случаях.' },
+      { q: 'Когда пора к специалисту?', a: 'Если тревога держится неделями, мешает работать, спать и общаться, или случаются частые панические атаки — стоит обратиться за помощью. Начать можно с направления «Спокойствие» и практик, а при необходимости подключить специалиста. В остром состоянии — 103 или телефон доверия.' },
+    ],
+    related: ['calm', 'body', 'selfworth', 'selfstudy'],
+    primaryCta: { href: '../directions/calm/', label: 'Направление «Спокойствие»', internal: true },
+    cta: { title: 'Соберите практики от тревоги в маршрут', text: 'Направление «Спокойствие» — дыхание, заземление и медитации в одном месте.' },
+  },
+];
+
 const arrowSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg>';
 
 function pageRoot(depth = 2) {
@@ -317,8 +454,9 @@ function liquidGlassSvg(depth = 2) {
   </svg>`;
 }
 
-function navHtml(depth = 2) {
+function navHtml(depth = 2, focusSlug = '') {
   const r = pageRoot(depth);
+  const app = focusSlug ? `${MAIN_SITE}?focus=${focusSlug}` : MAIN_SITE;
   return `  <nav class="nav" aria-label="Главная навигация">
     <div class="nav-inner">
       <a href="${r}/" class="nav-brand">
@@ -332,7 +470,7 @@ function navHtml(depth = 2) {
       </div>
       <div class="nav-cta">
         <a class="btn btn-ghost btn-sm" href="${r}/#directions">Все направления</a>
-        <a class="btn btn-primary btn-sm" href="${MAIN_SITE}" target="_blank" rel="noopener">Войти в систему</a>
+        <a class="btn btn-primary btn-sm" href="${app}" target="_blank" rel="noopener">Войти в систему</a>
         <button class="nav-burger" type="button" aria-label="Меню" aria-expanded="false">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
         </button>
@@ -342,13 +480,14 @@ function navHtml(depth = 2) {
       <a href="${r}/#directions">Направления</a>
       <a href="${r}/#features">Возможности</a>
       <a href="${r}/#programs">Программы</a>
-      <a href="${MAIN_SITE}" target="_blank" rel="noopener">Войти в систему</a>
+      <a href="${app}" target="_blank" rel="noopener">Войти в систему</a>
     </div>
   </nav>`;
 }
 
-function footerHtml(currentSlug, depth = 2) {
+function footerHtml(currentSlug, depth = 2, focusSlug = '') {
   const r = pageRoot(depth);
+  const app = focusSlug ? `${MAIN_SITE}?focus=${focusSlug}` : MAIN_SITE;
   return `  <footer class="footer">
     <div class="container footer-grid">
       <div class="footer-col-brand">
@@ -365,6 +504,11 @@ ${DIRECTIONS.map((d) => `        <a href="${r}/directions/${d.slug}/"${d.slug ==
       </div>
 
       <div class="footer-col">
+        <h4>Помощь</h4>
+${SEO_PAGES.map((p) => `        <a href="${r}/${p.slug}/">${p.title}</a>`).join('\n')}
+      </div>
+
+      <div class="footer-col">
         <h4>Документы</h4>
         <a href="${r}/offer/">Публичная оферта</a>
         <a href="${r}/privacy/">Политика ПД</a>
@@ -374,7 +518,7 @@ ${DIRECTIONS.map((d) => `        <a href="${r}/directions/${d.slug}/"${d.slug ==
 
       <div class="footer-col">
         <h4>Платформа</h4>
-        <a href="${MAIN_SITE}" class="footer-link-login" target="_blank" rel="noopener">
+        <a href="${app}" class="footer-link-login" target="_blank" rel="noopener">
           Войти в систему
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
@@ -467,6 +611,18 @@ function personJsonLd(description, path = 'author') {
   };
 }
 
+function faqJsonLd(faq) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map((item) => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: { '@type': 'Answer', text: item.a },
+    })),
+  };
+}
+
 function headHtml(opts) {
   const {
     title,
@@ -540,6 +696,8 @@ function previewVideoBlock(dir, r) {
 function directionPage(dir) {
   const others = DIRECTIONS.filter((d) => d.slug !== dir.slug);
   const path = `directions/${dir.slug}`;
+  const focusSlug = dir.focusApp ? dir.slug : '';
+  const app = focusSlug ? `${MAIN_SITE}?focus=${focusSlug}` : MAIN_SITE;
   const head = headHtml({
     title: dir.title,
     description: dir.description,
@@ -566,7 +724,7 @@ function directionPage(dir) {
 ${head}
 <body>
 
-${navHtml()}
+${navHtml(2, focusSlug)}
 
   <header class="dir-hero">
     <img class="card-media" src="../../assets/${dir.hero}" alt="" />
@@ -578,7 +736,7 @@ ${navHtml()}
       <h1 class="display reveal">${dir.titleHtml}</h1>
       <p class="lead reveal">${dir.lead}</p>
       <div class="dir-hero-actions reveal">
-        <a class="btn btn-primary" href="${MAIN_SITE}" target="_blank" rel="noopener">
+        <a class="btn btn-primary" href="${app}" target="_blank" rel="noopener">
           Войти в систему
           ${arrowSvg}
         </a>
@@ -610,7 +768,7 @@ ${dir.fits.map((fit) => `        <div class="fit-item reveal">
         <p class="lead">Система не разбрасывает внимание: основная программа задаёт глубину, дополнительная поддерживает. AI-помощник поможет выбрать, с чего начать.</p>
       </div>
       <div class="dir-programs" data-stagger>
-${dir.programs.map((program) => `        <a class="program-card reveal" href="${MAIN_SITE}" target="_blank" rel="noopener">
+${dir.programs.map((program) => `        <a class="program-card reveal" href="${app}" target="_blank" rel="noopener">
           <img class="card-media" src="../../assets/${program.image}" alt="" loading="lazy" />
           <span class="bento-pill">${program.pill}</span>
           <h3>${program.title}</h3>
@@ -637,6 +795,10 @@ ${previewVideoBlock(dir, '../../')}
         <div class="step reveal">
           <h3>AI-помощник Лиза</h3>
           <p>Знает каждый урок направления: объяснит сложное место, ответит на вопрос по материалу и подскажет практику под состояние.</p>
+        </div>
+        <div class="step reveal">
+          <h3>${dir.tools.title}</h3>
+          <p>${dir.tools.text}</p>
         </div>
         <div class="step reveal">
           <h3>Практики и сообщество</h3>
@@ -667,7 +829,7 @@ ${others.map((other) => `        <a class="more-dir reveal" href="../${other.slu
       <h2 class="h2 reveal">Начните маршрут<br />«${dir.title}» сегодня</h2>
       <p class="lead reveal">Регистрация занимает минуту. Система соберёт первый шаг: останется только начать.</p>
       <div class="hero-actions reveal">
-        <a class="btn btn-primary" href="${MAIN_SITE}" target="_blank" rel="noopener">
+        <a class="btn btn-primary" href="${app}" target="_blank" rel="noopener">
           Войти в систему
           ${arrowSvg}
         </a>
@@ -675,7 +837,7 @@ ${others.map((other) => `        <a class="more-dir reveal" href="../${other.slu
     </div>
   </section>
 
-${footerHtml(dir.slug)}
+${footerHtml(dir.slug, 2, focusSlug)}
 
 ${liquidGlassSvg()}
 
@@ -798,6 +960,174 @@ ${footerHtml(null)}
 ${liquidGlassSvg()}
 
   <script src="../../js/main.js"></script>
+</body>
+</html>
+`;
+}
+
+function seoPage(page) {
+  const path = page.slug;
+  const relatedDirs = (page.related || [])
+    .map((slug) => DIRECTIONS.find((d) => d.slug === slug))
+    .filter(Boolean);
+
+  const schema = [organizationJsonLd(), breadcrumbJsonLd(path, page.title), faqJsonLd(page.faq)];
+  if (page.schemaType === 'Service') {
+    schema.push({
+      '@context': 'https://schema.org',
+      '@type': 'Service',
+      name: page.title,
+      serviceType: page.serviceType || page.title,
+      description: page.description,
+      provider: organizationJsonLd(),
+      areaServed: { '@type': 'Country', name: 'Россия' },
+      url: canonicalUrl(path),
+      availableChannel: {
+        '@type': 'ServiceChannel',
+        serviceUrl: canonicalUrl(path),
+        availableLanguage: 'ru',
+      },
+    });
+  } else if (page.schemaType === 'Article') {
+    schema.push({
+      '@context': 'https://schema.org',
+      '@type': 'Article',
+      headline: page.seoTitle || page.title,
+      description: page.description,
+      image: ogImageUrl(page.hero),
+      inLanguage: 'ru-RU',
+      author: { '@type': 'Person', name: AUTHOR, url: canonicalUrl('author') },
+      publisher: organizationJsonLd(),
+      mainEntityOfPage: canonicalUrl(path),
+    });
+  }
+
+  const head = headHtml({
+    title: page.title,
+    pageTitle: page.seoTitle,
+    description: page.description,
+    hero: page.hero,
+    path,
+    keywords: page.keywords,
+    depth: 1,
+    jsonLd: schema,
+  });
+
+  const primary = page.primaryCta && page.primaryCta.internal
+    ? `<a class="btn btn-primary" href="${page.primaryCta.href}">${page.primaryCta.label} ${arrowSvg}</a>`
+    : `<a class="btn btn-primary" href="../quiz/">Пройти тест ${arrowSvg}</a>`;
+
+  const introBlock = (page.intro && page.intro.length)
+    ? `
+  <section class="section">
+    <div class="container">
+      <div class="reveal" style="max-width:760px;margin:0 auto;display:grid;gap:18px">
+${page.intro.map((p) => `        <p class="lead">${p}</p>`).join('\n')}
+      </div>
+    </div>
+  </section>`
+    : '';
+
+  return `<!DOCTYPE html>
+<html lang="ru">
+${head}
+<body>
+
+${navHtml(1)}
+
+  <header class="dir-hero">
+    <img class="card-media" src="../assets/${page.hero}" alt="" />
+    <div class="container">
+      <div class="breadcrumbs reveal">
+        <a href="../">Главная</a><i>/</i><span>${page.title}</span>
+      </div>
+      <span class="kicker reveal">${page.tag}</span>
+      <h1 class="display reveal">${page.titleHtml}</h1>
+      <p class="lead reveal">${page.lead}</p>
+      <div class="dir-hero-actions reveal">
+        ${primary}
+        <a class="btn btn-ghost" href="${MAIN_SITE}" target="_blank" rel="noopener">Войти в систему</a>
+      </div>
+    </div>
+  </header>
+${introBlock}
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="kicker">${page.signsKicker}</span>
+        <h2 class="h2">${page.signsTitle}</h2>
+      </div>
+      <div class="fit-grid" data-stagger>
+${page.signs.map((s) => `        <div class="fit-item reveal">
+          <strong>${s.title}</strong>
+          <p>${s.text}</p>
+        </div>`).join('\n')}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="kicker">${page.helpKicker}</span>
+        <h2 class="h2">${page.helpTitle}</h2>
+      </div>
+      <div class="steps" data-stagger>
+${page.help.map((s) => `        <div class="step reveal">
+          <h3>${s.title}</h3>
+          <p>${s.text}</p>
+        </div>`).join('\n')}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="faq">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="kicker">Вопросы и ответы</span>
+        <h2 class="h2">Частые вопросы</h2>
+      </div>
+      <div class="fit-grid" data-stagger>
+${page.faq.map((f) => `        <div class="fit-item reveal">
+          <strong>${escapeHtml(f.q)}</strong>
+          <p>${escapeHtml(f.a)}</p>
+        </div>`).join('\n')}
+      </div>
+    </div>
+  </section>
+${relatedDirs.length ? `
+  <section class="section">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="kicker">Направления</span>
+        <h2 class="h2">С чего начать в Системе</h2>
+      </div>
+      <div class="more-dirs" data-stagger>
+${relatedDirs.map((d) => `        <a class="more-dir reveal" href="../directions/${d.slug}/">
+          <img class="card-media" src="../assets/${d.hero}" alt="" loading="lazy" />
+          <strong>${d.title}</strong>
+        </a>`).join('\n')}
+      </div>
+    </div>
+  </section>` : ''}
+
+  <section class="final-cta">
+    <div class="container">
+      <span class="kicker reveal">${page.tag}</span>
+      <h2 class="h2 reveal">${page.cta.title}</h2>
+      <p class="lead reveal">${page.cta.text}</p>
+      <div class="hero-actions reveal">
+        ${primary}
+      </div>
+    </div>
+  </section>
+
+${footerHtml(null, 1)}
+
+${liquidGlassSvg(1)}
+
+  <script src="../js/main.js"></script>
 </body>
 </html>
 `;
@@ -1058,6 +1388,12 @@ for (const event of EVENTS) {
 mkdirSync(join(ROOT, 'author'), { recursive: true });
 writeFileSync(join(ROOT, 'author', 'index.html'), authorPage(), 'utf8');
 console.log('✓ author/index.html');
+for (const page of SEO_PAGES) {
+  const folder = join(ROOT, page.slug);
+  mkdirSync(folder, { recursive: true });
+  writeFileSync(join(folder, 'index.html'), seoPage(page), 'utf8');
+  console.log(`✓ ${page.slug}/index.html`);
+}
 console.log('Готово.');
 
 function writeSeoFiles() {
@@ -1068,6 +1404,7 @@ function writeSeoFiles() {
     { loc: `${LANDING_SITE}/events/event-yoga/`, priority: '0.95', changefreq: 'daily' },
     ...DIRECTIONS.map((d) => ({ loc: `${LANDING_SITE}/directions/${d.slug}/`, priority: '0.8', changefreq: 'weekly' })),
     ...FEATURES.filter((f) => !f.hidden).map((f) => ({ loc: `${LANDING_SITE}/features/${f.slug}/`, priority: '0.8', changefreq: 'weekly' })),
+    ...SEO_PAGES.map((p) => ({ loc: `${LANDING_SITE}/${p.slug}/`, priority: '0.85', changefreq: 'weekly' })),
     { loc: `${LANDING_SITE}/offer/`, priority: '0.3', changefreq: 'monthly' },
     { loc: `${LANDING_SITE}/privacy/`, priority: '0.3', changefreq: 'monthly' },
     { loc: `${LANDING_SITE}/terms/`, priority: '0.3', changefreq: 'monthly' },
@@ -1134,6 +1471,10 @@ ${DIRECTIONS.map((d) => `- [${d.title}](${LANDING_SITE}/directions/${d.slug}/): 
 ## Возможности платформы
 
 ${FEATURES.filter((f) => !f.hidden).map((f) => `- [${f.title}](${LANDING_SITE}/features/${f.slug}/): ${f.description}`).join('\n')}
+
+## Помощь и подбор
+
+${SEO_PAGES.map((p) => `- [${p.title}](${LANDING_SITE}/${p.slug}/): ${p.description}`).join('\n')}
 
 ## Автор
 

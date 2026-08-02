@@ -79,6 +79,24 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://sistema-molodtsova.ru/podbor-psihologa/</loc>
+    <lastmod>2026-06-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://sistema-molodtsova.ru/psihologicheskaya-pomosch/</loc>
+    <lastmod>2026-06-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://sistema-molodtsova.ru/trevoga/</loc>
+    <lastmod>2026-06-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
     <loc>https://sistema-molodtsova.ru/offer/</loc>
     <lastmod>2026-06-21</lastmod>
     <changefreq>monthly</changefreq>
