@@ -86,6 +86,7 @@
 
     body.dq-playing .nav,
     body.dq-done .nav{
+      top:calc(14px + env(safe-area-inset-top,0px));
       background:
         linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.015)),
         rgba(7,9,15,.78);
@@ -126,14 +127,14 @@
     /* Playing: убираем hero — экран только под вопросы */
     body.dq-playing .dir-hero{display:none}
     body.dq-playing .section-quiz{
-      padding-top:calc(86px + env(safe-area-inset-top,0px));
+      padding-top:calc(96px + env(safe-area-inset-top,0px));
       padding-bottom:max(28px,env(safe-area-inset-bottom));
       min-height:100svh;
     }
     body.dq-playing .footer{display:none}
     body.dq-playing .dq-top{
       position:sticky;
-      top:calc(78px + env(safe-area-inset-top,0px));
+      top:calc(86px + env(safe-area-inset-top,0px));
       z-index:30;
       margin:0 0 12px;
       padding:8px 0 10px;
@@ -150,10 +151,10 @@
 
     @media (max-width:760px){
       body.dq-playing .section-quiz{
-        padding-top:calc(78px + env(safe-area-inset-top,0px));
+        padding-top:calc(92px + env(safe-area-inset-top,0px));
       }
       body.dq-playing .dq-top{
-        top:calc(70px + env(safe-area-inset-top,0px));
+        top:calc(82px + env(safe-area-inset-top,0px));
       }
       body.dq-playing .dq-question{
         font-size:clamp(18px,5.2vw,22px);
@@ -179,8 +180,8 @@
       .dq-result-actions .btn{width:auto}
       .dq-program .dir-card-arrow{display:flex;margin-left:auto}
       .dq-program img{width:74px;height:74px}
-      body.dq-playing .dq-top{top:84px}
-      body.dq-playing .section-quiz{padding-top:110px}
+      body.dq-playing .dq-top{top:calc(88px + env(safe-area-inset-top,0px))}
+      body.dq-playing .section-quiz{padding-top:calc(120px + env(safe-area-inset-top,0px))}
     }
 
     /* Короткие экраны: ещё плотнее */
@@ -235,12 +236,6 @@
       <span class="kicker reveal">Тест · 2 минуты</span>
       <h1 class="display reveal">С чего<br /><span class="text-gradient">начать</span></h1>
       <p class="lead reveal">Шесть коротких сцен — и направление с программой, которые сейчас ближе всего.</p>
-      <div class="dir-hero-actions reveal">
-        <a class="btn btn-primary" id="dq-hero-start" href="?start=1#dq-shell">
-          Пройти тест
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-      </div>
     </div>
   </header>
 
@@ -258,7 +253,7 @@
             <h2>Выберите, что откликается</h2>
             <p>Отвечайте быстро, как кадр из фильма про себя. Не «как правильно» — что ближе сейчас.</p>
             <button class="btn btn-primary" type="button" id="dq-start">
-              Начать
+              Пройти тест
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </button>
             <p class="dq-note">Результат — точка входа в библиотеку, не диагноз и не ярлык.</p>
@@ -269,7 +264,7 @@
               <div class="dq-progress"><div class="dq-progress-bar" id="dq-progress-bar"></div></div>
               <div class="dq-step-meta"><span id="dq-step-num">1</span> / <span id="dq-step-total">6</span></div>
             </div>
-            <p class="dq-q-kicker" id="dq-q-kicker">Сцена</p>
+            <p class="dq-q-kicker" id="dq-q-kicker">Ситуация</p>
             <h3 class="dq-question" id="dq-question"></h3>
             <div class="dq-options" id="dq-options"></div>
           </div>
@@ -341,6 +336,6 @@
   </footer>
 
   <script src="../js/main.js"></script>
-  <script src="../js/direction-quiz.js?v=5"></script>
+  <script src="../js/direction-quiz.js?v=6"></script>
 </body>
 </html>
