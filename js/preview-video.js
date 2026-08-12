@@ -15,6 +15,7 @@
   ];
 
   let loadAttempt = 0;
+  let activeSrc = '';
 
   function apiOrigin(base) {
     return String(base || '').replace(/\/api\/?$/u, '');
@@ -74,19 +75,14 @@
 
   function playSrc(src) {
     clearError();
+    activeSrc = String(src || '');
+    // Без crossorigin: иначе браузер требует CORS у Object Storage.
     video.removeAttribute('crossorigin');
     const source = video.querySelector('[data-landing-preview-source]');
-    if (source) {
-      source.src = src;
-    } else {
-      video.src = src;
-    }
+    if (source) source.src = activeSrc;
+    // Явно на video.src — надёжнее, чем только <source>, особенно после redirect.
+    video.src = activeSrc;
     video.load();
-  }
-
-  async function loadProxy() {
-    const origin = await resolveApiOrigin();
-    playSrc(`${origin}/api/video/preview-mp4?slug=${encodeURIComponent(slug)}`);
   }
 
   async function loadPresign() {
@@ -95,17 +91,24 @@
     playSrc(data.url);
   }
 
+  async function loadProxyRedirect() {
+    // Backend отдаёт 307 на signed URL (как shorts). Плеер сам следует redirect.
+    const origin = await resolveApiOrigin();
+    playSrc(`${origin}/api/video/preview-mp4?slug=${encodeURIComponent(slug)}`);
+  }
+
   async function boot() {
     shell.classList.add('is-loading');
     loadAttempt += 1;
     try {
-      await loadProxy();
+      // Сначала прямой signed URL — лучше для больших уроков и seek к moov в конце.
+      await loadPresign();
     } catch (err) {
-      console.error('[landing-preview-video] proxy failed', err);
+      console.error('[landing-preview-video] presign failed', err);
       try {
-        await loadPresign();
+        await loadProxyRedirect();
       } catch (fallbackErr) {
-        console.error('[landing-preview-video] presign failed', fallbackErr);
+        console.error('[landing-preview-video] proxy redirect failed', fallbackErr);
         showError('Видео временно недоступно. Откройте урок в приложении Системы.');
       }
     } finally {
@@ -114,11 +117,11 @@
   }
 
   video.addEventListener('error', function onVideoError() {
-    if (!video.currentSrc) return;
+    if (!activeSrc && !video.currentSrc) return;
     if (loadAttempt < 2) {
       loadAttempt += 1;
       shell.classList.add('is-loading');
-      loadPresign()
+      loadProxyRedirect()
         .catch(function () {
           showError('Не удалось воспроизвести видео. Попробуйте обновить страницу.');
         })
