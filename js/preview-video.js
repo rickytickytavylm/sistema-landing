@@ -14,8 +14,16 @@
     'https://api.sistema-molodtsov.ru/api',
   ];
 
-  let loadAttempt = 0;
+  let loadStarted = false;
   let activeSrc = '';
+  let triedProxyFallback = false;
+
+  function isAppleTouchVideoDevice() {
+    const ua = navigator.userAgent || '';
+    const platform = navigator.platform || '';
+    return /iPad|iPhone|iPod/i.test(ua) ||
+      (platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  }
 
   function apiOrigin(base) {
     return String(base || '').replace(/\/api\/?$/u, '');
@@ -23,6 +31,7 @@
 
   function showError(message) {
     shell.classList.add('has-error');
+    shell.classList.remove('is-loading');
     let note = shell.querySelector('[data-landing-preview-error]');
     if (!note) {
       note = document.createElement('p');
@@ -73,16 +82,29 @@
     throw lastError || new Error('API unavailable');
   }
 
+  function prepareVideoAttrs() {
+    video.setAttribute('playsinline', '');
+    video.setAttribute('webkit-playsinline', '');
+    video.setAttribute('controls', '');
+    video.playsInline = true;
+    video.preload = 'metadata';
+    // Без crossorigin: иначе Safari требует CORS у Object Storage.
+    video.removeAttribute('crossorigin');
+  }
+
   function playSrc(src) {
     clearError();
     activeSrc = String(src || '');
-    // Без crossorigin: иначе браузер требует CORS у Object Storage.
-    video.removeAttribute('crossorigin');
+    prepareVideoAttrs();
     const source = video.querySelector('[data-landing-preview-source]');
-    if (source) source.src = activeSrc;
-    // Явно на video.src — надёжнее, чем только <source>, особенно после redirect.
+    if (source) {
+      source.removeAttribute('src');
+      source.remove();
+    }
     video.src = activeSrc;
-    video.load();
+    try {
+      video.load();
+    } catch (_) {}
   }
 
   async function loadPresign() {
@@ -92,46 +114,105 @@
   }
 
   async function loadProxyRedirect() {
-    // Backend отдаёт 307 на signed URL (как shorts). Плеер сам следует redirect.
     const origin = await resolveApiOrigin();
     playSrc(`${origin}/api/video/preview-mp4?slug=${encodeURIComponent(slug)}`);
   }
 
-  async function boot() {
+  function ensureOverlay() {
+    let overlay = shell.querySelector('[data-landing-preview-start]');
+    if (overlay) return overlay;
+
+    const poster = video.getAttribute('poster') || '';
+    overlay = document.createElement('button');
+    overlay.type = 'button';
+    overlay.className = 'landing-preview-start';
+    overlay.setAttribute('data-landing-preview-start', '');
+    overlay.setAttribute('aria-label', 'Смотреть видео');
+    if (poster) overlay.style.backgroundImage = `url('${poster}')`;
+    overlay.innerHTML =
+      '<span class="landing-preview-start-action" aria-hidden="true">' +
+        '<span class="landing-preview-start-icon"></span>' +
+        '<span class="landing-preview-start-label">Смотреть первый урок</span>' +
+      '</span>';
+    shell.insertBefore(overlay, video.nextSibling);
+    return overlay;
+  }
+
+  async function startPlayback() {
+    if (loadStarted) return;
+    loadStarted = true;
+    clearError();
     shell.classList.add('is-loading');
-    loadAttempt += 1;
+    const overlay = shell.querySelector('[data-landing-preview-start]');
+    if (overlay) overlay.classList.add('is-loading');
+
     try {
-      // Сначала прямой signed URL — лучше для больших уроков и seek к moov в конце.
+      // Как в приложении/shorts: сначала прямой signed URL (Yandex, РФ).
       await loadPresign();
+      if (overlay) {
+        overlay.classList.remove('is-loading');
+        overlay.classList.add('is-hidden');
+      }
+      shell.classList.remove('is-loading');
+
+      // На iPhone autoplay после жеста часто ок; если нет — остаются controls.
+      const playPromise = video.play && video.play();
+      if (playPromise && typeof playPromise.then === 'function') {
+        playPromise.catch(function () {
+          if (isAppleTouchVideoDevice()) return;
+          if (overlay) {
+            overlay.classList.remove('is-hidden');
+            loadStarted = false;
+          }
+        });
+      }
     } catch (err) {
-      console.error('[landing-preview-video] presign failed', err);
+      console.error('[landing-preview-video] start failed', err);
       try {
         await loadProxyRedirect();
+        if (overlay) {
+          overlay.classList.remove('is-loading');
+          overlay.classList.add('is-hidden');
+        }
+        shell.classList.remove('is-loading');
+        if (video.play) video.play().catch(function () {});
       } catch (fallbackErr) {
-        console.error('[landing-preview-video] proxy redirect failed', fallbackErr);
+        console.error('[landing-preview-video] proxy failed', fallbackErr);
+        loadStarted = false;
+        if (overlay) overlay.classList.remove('is-loading');
+        shell.classList.remove('is-loading');
         showError('Видео временно недоступно. Откройте урок в приложении Системы.');
       }
-    } finally {
-      shell.classList.remove('is-loading');
     }
   }
 
   video.addEventListener('error', function onVideoError() {
-    if (!activeSrc && !video.currentSrc) return;
-    if (loadAttempt < 2) {
-      loadAttempt += 1;
+    if (!loadStarted || !activeSrc) return;
+    if (!triedProxyFallback && /yandexcloud\.net/i.test(activeSrc)) {
+      triedProxyFallback = true;
       shell.classList.add('is-loading');
       loadProxyRedirect()
+        .then(function () {
+          shell.classList.remove('is-loading');
+          if (video.play) video.play().catch(function () {});
+        })
         .catch(function () {
           showError('Не удалось воспроизвести видео. Попробуйте обновить страницу.');
-        })
-        .finally(function () {
-          shell.classList.remove('is-loading');
         });
       return;
     }
     showError('Не удалось воспроизвести видео. Попробуйте обновить страницу.');
   });
 
-  boot();
+  prepareVideoAttrs();
+  video.preload = 'none';
+  // Пустой <source> на iOS даёт MEDIA_ERR сразу — убираем до клика.
+  const emptySource = video.querySelector('[data-landing-preview-source]');
+  if (emptySource && !emptySource.getAttribute('src')) emptySource.remove();
+
+  const overlay = ensureOverlay();
+  overlay.addEventListener('click', function (ev) {
+    ev.preventDefault();
+    startPlayback();
+  });
 })();

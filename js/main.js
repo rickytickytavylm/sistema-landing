@@ -70,4 +70,36 @@
   document.querySelectorAll('[data-marquee]').forEach((track) => {
     track.innerHTML += track.innerHTML;
   });
+
+  /* ── Hero background video (iOS Safari needs muted + playsInline + play()) ── */
+  (function initHeroBgVideo() {
+    const video = document.querySelector('video.hero-bg');
+    if (!video) return;
+
+    video.muted = true;
+    video.defaultMuted = true;
+    video.setAttribute('muted', '');
+    video.setAttribute('playsinline', '');
+    video.setAttribute('webkit-playsinline', '');
+    video.playsInline = true;
+    video.loop = true;
+    video.preload = 'auto';
+
+    const tryPlay = () => {
+      const p = video.play();
+      if (p && typeof p.catch === 'function') p.catch(() => {});
+    };
+
+    tryPlay();
+    video.addEventListener('loadeddata', tryPlay, { once: true });
+    video.addEventListener('canplay', tryPlay, { once: true });
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden && video.paused) tryPlay();
+    });
+    video.addEventListener('error', () => {
+      video.style.display = 'none';
+      const fallback = document.querySelector('.hero-bg-fallback');
+      if (fallback) fallback.style.display = 'block';
+    });
+  })();
 })();
