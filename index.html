@@ -27,9 +27,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="preload" as="image" href="assets/spectrum-flashes-coloured-light.webp" media="(min-width: 761px)" />
-  <link rel="preload" as="image" href="assets/hero_landing_mob.webp" media="(max-width: 760px)" />
-  <link rel="stylesheet" href="css/style.css?v=168" />
+  <link rel="preload" as="image" href="assets/for_hero_poster.webp" />
+  <link rel="stylesheet" href="css/style.css?v=169" />
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -109,10 +108,20 @@
 
   <!-- ─── Hero ──────────────────────────────────────── -->
   <header class="hero">
-    <picture class="hero-bg-wrap" aria-hidden="true">
-      <source media="(max-width: 760px)" srcset="assets/hero_landing_mob.webp" type="image/webp" />
-      <img class="hero-bg" src="assets/spectrum-flashes-coloured-light.webp" alt="" fetchpriority="high" decoding="async" width="2000" height="1121" />
-    </picture>
+    <div class="hero-bg-wrap" aria-hidden="true">
+      <video
+        class="hero-bg"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        poster="assets/for_hero_poster.webp"
+      >
+        <source src="assets/for_hero.web.mp4" type="video/mp4" />
+      </video>
+      <img class="hero-bg hero-bg-fallback" src="assets/for_hero_poster.webp" alt="" width="1600" height="900" decoding="async" />
+    </div>
     <div class="container">
       <h1 class="display reveal">Персональная система<br /><span class="text-gradient">психологического развития.</span></h1>
       <p class="lead reveal">Вы выбираете, что сейчас важно. Система собирает маршрут, программы, практики и AI-помощника вокруг вашей задачи.</p>

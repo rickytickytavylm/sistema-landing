@@ -320,6 +320,7 @@ h1, h2, h3 { margin: 0; font-weight: 800; letter-spacing: -.04em; }
   z-index: 0;
   display: block;
   pointer-events: none;
+  background: #05070d;
 }
 
 .hero-bg {
@@ -328,6 +329,19 @@ h1, h2, h3 { margin: 0; font-weight: 800; letter-spacing: -.04em; }
   object-fit: cover;
   object-position: center 38%;
   user-select: none;
+}
+
+video.hero-bg {
+  display: block;
+}
+
+.hero-bg-fallback {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  video.hero-bg { display: none; }
+  .hero-bg-fallback { display: block; }
 }
 
 .hero::after {
