@@ -147,7 +147,7 @@
           Войти в систему
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg>
         </a>
-        <a class="btn btn-ghost" href="#programs">Смотреть программы</a>
+        <a class="btn btn-ghost" href="#preview-lesson">Посмотреть первый урок</a>
       </div>
     </div>
   </header>
@@ -201,7 +201,21 @@
     </div>
   </section>
 
-
+  <section class="section landing-preview-video" id="preview-lesson">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="kicker">Попробуйте сейчас</span>
+        <h2 class="h2">Первый урок «Работа с травмами»</h2>
+        <p class="lead">Введение из основной программы направления: кризисы, травматичный опыт и восстановление внутренней опоры. Первый урок доступен прямо здесь.</p>
+      </div>
+      <div class="landing-video-card reveal" data-landing-preview data-video-slug="Курс Дермер/Курс/1 неделя/1 урок.mp4">
+        <video class="landing-preview-player" controls playsinline preload="metadata" poster="../../assets/geshtalt.webp">
+          <source data-landing-preview-source type="video/mp4" />
+        </video>
+        <p class="landing-preview-meta">бесплатный фрагмент · без регистрации</p>
+      </div>
+    </div>
+  </section>
 
   <section class="section">
     <div class="container">
@@ -334,6 +348,7 @@
   </svg>
 
   <script src="../../js/main.js"></script>
+  <script src="../../js/preview-video.js"></script>
 
 </body>
 </html>

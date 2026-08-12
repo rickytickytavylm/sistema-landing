@@ -9,6 +9,7 @@
   if (!video || !slug) return;
 
   const API_BASES = [
+    'https://api.xn----7sbbhjdu1agcwbb5abq1f.xn--p1ai/api',
     'https://web-production-3cb7a.up.railway.app/api',
     'https://api.sistema-molodtsov.ru/api',
   ];
