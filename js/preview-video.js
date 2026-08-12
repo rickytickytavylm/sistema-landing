@@ -1,6 +1,11 @@
 (function initLandingPreviewVideo() {
   'use strict';
 
+  // Как в приложении (yoga-1.js → setupVideoPreview + attachVideoSource):
+  // 1) оверлей и старт только по тапу
+  // 2) сначала HLS (на iPhone — нативный), MP4 только fallback
+  // Сырой 2ГБ mp4 на Safari падает — поэтому не грузим его первым.
+
   const shell = document.querySelector('[data-landing-preview]');
   if (!shell) return;
 
@@ -16,13 +21,21 @@
 
   let loadStarted = false;
   let activeSrc = '';
-  let triedProxyFallback = false;
+  let hlsInstance = null;
+  let mp4FallbackTried = false;
 
   function isAppleTouchVideoDevice() {
     const ua = navigator.userAgent || '';
     const platform = navigator.platform || '';
     return /iPad|iPhone|iPod/i.test(ua) ||
       (platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  }
+
+  function canPlayNativeHls() {
+    return !!(
+      video.canPlayType('application/vnd.apple.mpegurl') ||
+      video.canPlayType('application/x-mpegURL')
+    );
   }
 
   function apiOrigin(base) {
@@ -65,57 +78,108 @@
     throw lastError || new Error('API unavailable');
   }
 
-  async function resolveApiOrigin() {
-    let lastError = null;
-    for (const base of API_BASES) {
-      try {
-        const response = await fetch(`${base}/health`, { credentials: 'omit', mode: 'cors' });
-        if (!response.ok) {
-          lastError = new Error(`HTTP ${response.status}`);
-          continue;
-        }
-        return apiOrigin(base);
-      } catch (err) {
-        lastError = err;
-      }
-    }
-    throw lastError || new Error('API unavailable');
-  }
-
   function prepareVideoAttrs() {
     video.setAttribute('playsinline', '');
     video.setAttribute('webkit-playsinline', '');
     video.setAttribute('controls', '');
     video.playsInline = true;
     video.preload = 'metadata';
-    // Без crossorigin: иначе Safari требует CORS у Object Storage.
     video.removeAttribute('crossorigin');
   }
 
-  function playSrc(src) {
+  function stripEmptySource() {
+    const source = video.querySelector('[data-landing-preview-source]');
+    if (source) source.remove();
+  }
+
+  function destroyHls() {
+    if (hlsInstance && typeof hlsInstance.destroy === 'function') {
+      try { hlsInstance.destroy(); } catch (_) {}
+    }
+    hlsInstance = null;
+  }
+
+  function ensureHlsJs() {
+    if (window.Hls) return Promise.resolve(window.Hls);
+    return new Promise(function (resolve, reject) {
+      const existing = document.querySelector('script[data-hls-loader="true"]');
+      if (existing) {
+        existing.addEventListener('load', function () { resolve(window.Hls); });
+        existing.addEventListener('error', reject);
+        return;
+      }
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/hls.js@1.4.12/dist/hls.min.js';
+      script.async = true;
+      script.dataset.hlsLoader = 'true';
+      script.onload = function () { resolve(window.Hls); };
+      script.onerror = reject;
+      document.head.appendChild(script);
+    });
+  }
+
+  function playUrl(src) {
     clearError();
     activeSrc = String(src || '');
     prepareVideoAttrs();
-    const source = video.querySelector('[data-landing-preview-source]');
-    if (source) {
-      source.removeAttribute('src');
-      source.remove();
-    }
+    stripEmptySource();
+    destroyHls();
+    if (video.getAttribute('src')) video.removeAttribute('src');
     video.src = activeSrc;
-    try {
-      video.load();
-    } catch (_) {}
+    try { video.load(); } catch (_) {}
   }
 
-  async function loadPresign() {
+  async function loadMp4() {
     const { data } = await apiFetch(`/video/presign?slug=${encodeURIComponent(slug)}`);
     if (!data || !data.url) throw new Error('No presign url');
-    playSrc(data.url);
+    playUrl(data.url);
   }
 
-  async function loadProxyRedirect() {
-    const origin = await resolveApiOrigin();
-    playSrc(`${origin}/api/video/preview-mp4?slug=${encodeURIComponent(slug)}`);
+  async function loadHls() {
+    const { base, data } = await apiFetch(`/video/hls-token?slug=${encodeURIComponent(slug)}`);
+    if (!data || !data.token) throw new Error('No hls token');
+    const hlsUrl = `${base}/video/hls.m3u8?token=${encodeURIComponent(data.token)}`;
+    prepareVideoAttrs();
+    stripEmptySource();
+    destroyHls();
+    clearError();
+    activeSrc = hlsUrl;
+
+    if (canPlayNativeHls()) {
+      // iPhone/Safari — как в attachVideoSource для Apple.
+      if (video.getAttribute('src')) video.removeAttribute('src');
+      video.src = hlsUrl;
+      try { video.load(); } catch (_) {}
+      return { type: 'hls-native', url: hlsUrl };
+    }
+
+    const Hls = await ensureHlsJs().catch(function () { return null; });
+    if (Hls && Hls.isSupported()) {
+      if (video.getAttribute('src')) video.removeAttribute('src');
+      const hls = new Hls({
+        enableWorker: false,
+        autoStartLoad: true,
+        lowLatencyMode: false,
+        backBufferLength: 30,
+        maxBufferLength: 60,
+      });
+      hlsInstance = hls;
+      hls.on(Hls.Events.ERROR, function (_evt, info) {
+        if (!info || !info.fatal || mp4FallbackTried) return;
+        mp4FallbackTried = true;
+        destroyHls();
+        loadMp4().catch(function () {
+          showError('Не удалось воспроизвести видео. Попробуйте обновить страницу.');
+        });
+      });
+      hls.attachMedia(video);
+      hls.loadSource(hlsUrl);
+      return { type: 'hls-js', url: hlsUrl };
+    }
+
+    // Нет HLS — сразу MP4.
+    await loadMp4();
+    return { type: 'mp4', url: activeSrc };
   }
 
   function ensureOverlay() {
@@ -138,6 +202,15 @@
     return overlay;
   }
 
+  function requestPlay() {
+    const playPromise = video.play && video.play();
+    if (playPromise && typeof playPromise.then === 'function') {
+      playPromise.catch(function () {
+        // После жеста на iPhone controls достаточно.
+      });
+    }
+  }
+
   async function startPlayback() {
     if (loadStarted) return;
     loadStarted = true;
@@ -147,37 +220,25 @@
     if (overlay) overlay.classList.add('is-loading');
 
     try {
-      // Как в приложении/shorts: сначала прямой signed URL (Yandex, РФ).
-      await loadPresign();
+      await loadHls();
       if (overlay) {
         overlay.classList.remove('is-loading');
         overlay.classList.add('is-hidden');
       }
       shell.classList.remove('is-loading');
-
-      // На iPhone autoplay после жеста часто ок; если нет — остаются controls.
-      const playPromise = video.play && video.play();
-      if (playPromise && typeof playPromise.then === 'function') {
-        playPromise.catch(function () {
-          if (isAppleTouchVideoDevice()) return;
-          if (overlay) {
-            overlay.classList.remove('is-hidden');
-            loadStarted = false;
-          }
-        });
-      }
+      requestPlay();
     } catch (err) {
-      console.error('[landing-preview-video] start failed', err);
+      console.error('[landing-preview-video] hls failed', err);
       try {
-        await loadProxyRedirect();
+        await loadMp4();
         if (overlay) {
           overlay.classList.remove('is-loading');
           overlay.classList.add('is-hidden');
         }
         shell.classList.remove('is-loading');
-        if (video.play) video.play().catch(function () {});
+        requestPlay();
       } catch (fallbackErr) {
-        console.error('[landing-preview-video] proxy failed', fallbackErr);
+        console.error('[landing-preview-video] mp4 failed', fallbackErr);
         loadStarted = false;
         if (overlay) overlay.classList.remove('is-loading');
         shell.classList.remove('is-loading');
@@ -188,13 +249,14 @@
 
   video.addEventListener('error', function onVideoError() {
     if (!loadStarted || !activeSrc) return;
-    if (!triedProxyFallback && /yandexcloud\.net/i.test(activeSrc)) {
-      triedProxyFallback = true;
+    // Нативный HLS на Apple упал → один раз пробуем MP4.
+    if (!mp4FallbackTried && /hls\.m3u8/i.test(activeSrc)) {
+      mp4FallbackTried = true;
       shell.classList.add('is-loading');
-      loadProxyRedirect()
+      loadMp4()
         .then(function () {
           shell.classList.remove('is-loading');
-          if (video.play) video.play().catch(function () {});
+          requestPlay();
         })
         .catch(function () {
           showError('Не удалось воспроизвести видео. Попробуйте обновить страницу.');
@@ -206,9 +268,7 @@
 
   prepareVideoAttrs();
   video.preload = 'none';
-  // Пустой <source> на iOS даёт MEDIA_ERR сразу — убираем до клика.
-  const emptySource = video.querySelector('[data-landing-preview-source]');
-  if (emptySource && !emptySource.getAttribute('src')) emptySource.remove();
+  stripEmptySource();
 
   const overlay = ensureOverlay();
   overlay.addEventListener('click', function (ev) {
